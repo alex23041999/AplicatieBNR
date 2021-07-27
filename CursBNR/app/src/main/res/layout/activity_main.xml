@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomeScreen"
+    android:background="@drawable/backgroundstyle"
+    android:orientation="vertical"
+    android:weightSum="3">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cursvalutar"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_ripple"
+            android:layout_gravity="left"
+            android:text="Curs valutar"
+            android:textAlignment="gravity"
+            android:textColor="#00e0e1"
+            android:textSize="20dp"
+            android:textStyle="bold|italic"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="50dp"
+            android:drawableLeft="@drawable/ic_baseline_monetization_on_24"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_generarerapoarte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/gradient_ripple"
+            android:gravity="center"
+            android:text="Generare rapoarte"
+            android:textAlignment="center"
+            android:textColor="#00e0e1"
+            android:textSize="20dp"
+            android:textStyle="bold|italic"
+            android:layout_margin="50dp"
+            android:drawableLeft="@drawable/ic_baseline_insert_drive_file_24"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_istoricrapoarte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/gradient_ripple"
+            android:gravity="center"
+            android:text="ISTORIC RAPOARTE"
+            android:textAlignment="center"
+            android:textColor="#00e0e1"
+            android:textSize="20dp"
+            android:textStyle="bold|italic"
+            android:layout_marginBottom="100dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="50dp"
+            android:drawableLeft="@drawable/ic_baseline_history_24"/>
+
+</LinearLayout>

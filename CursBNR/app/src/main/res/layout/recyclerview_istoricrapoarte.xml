@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="4"
+    android:background="@drawable/background_recyclerview"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/tv_tipmoneda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_margin="5dp"
+        android:hint="Moneda"
+        android:gravity="center"
+        android:textColor="#00e0e1"/>
+    <TextView
+        android:id="@+id/tv_datainceput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_margin="5dp"
+        android:hint="Data start"
+        android:gravity="center"
+        android:textColor="#00e0e1"/>
+    <TextView
+        android:id="@+id/tv_datasfarsit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_margin="5dp"
+        android:hint="Data sfarsit"
+        android:gravity="center"
+        android:textColor="#00e0e1"/>
+    <TextView
+        android:id="@+id/tv_tipraport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_margin="5dp"
+        android:hint="Tip raport"
+        android:gravity="center"
+        android:textColor="#00e0e1"/>
+
+</LinearLayout>

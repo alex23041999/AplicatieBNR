@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DataSet>
+    <Header>
+        <Publisher>National Bank of Romania</Publisher>
+        <PublishingDate>2021-07-14</PublishingDate>
+        <MessageType>DR</MessageType>
+    </Header>
+    <Body>
+        <Subject>Reference rates</Subject>
+        <OrigCurrency>RON</OrigCurrency>
+        <Cube date="2021-07-13">
+            <Rate currency="AED">1.1332</Rate>
+            <Rate currency="AUD">3.1131</Rate>
+            <Rate currency="BGN">2.5195</Rate>
+            <Rate currency="BRL">0.8045</Rate>
+            <Rate currency="CAD">3.3353</Rate>
+            <Rate currency="CHF">4.5428</Rate>
+            <Rate currency="CNY">0.6436</Rate>
+            <Rate currency="CZK">0.1919</Rate>
+            <Rate currency="DKK">0.6625</Rate>
+            <Rate currency="EGP">0.2648</Rate>
+            <Rate currency="EUR">4.9278</Rate>
+            <Rate currency="GBP">5.7669</Rate>
+            <Rate currency="HRK">0.6575</Rate>
+            <Rate currency="HUF" multiplier="100">1.3815</Rate>
+            <Rate currency="INR">0.0559</Rate>
+            <Rate currency="JPY" multiplier="100">3.7735</Rate>
+            <Rate currency="KRW" multiplier="100">0.3638</Rate>
+            <Rate currency="MDL">0.2303</Rate>
+            <Rate currency="MXN">0.2092</Rate>
+            <Rate currency="NOK">0.4779</Rate>
+            <Rate currency="NZD">2.9058</Rate>
+            <Rate currency="PLN">1.0776</Rate>
+            <Rate currency="RSD">0.0419</Rate>
+            <Rate currency="RUB">0.0562</Rate>
+            <Rate currency="SEK">0.4838</Rate>
+            <Rate currency="THB">0.1277</Rate>
+            <Rate currency="TRY">0.4823</Rate>
+            <Rate currency="UAH">0.1523</Rate>
+            <Rate currency="USD">4.1625</Rate>
+            <Rate currency="XAU">241.9105</Rate>
+            <Rate currency="XDR">5.9300</Rate>
+            <Rate currency="ZAR">0.2853</Rate>
+        </Cube>
+    </Body>
+</DataSet>
