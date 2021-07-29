@@ -34,8 +34,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CursValutar extends Activity {
+    private CompositeDisposable compositeDisposable;
     ArrayList<String> monede;
     ArrayList<String> valori;
     RecyclerCurs_Adapter adapter;
@@ -44,7 +51,6 @@ public class CursValutar extends Activity {
     TextView tv_cursvalutar, tv_datacurenta;
     BroadcastReceiver broadcastReceiver3;
     static final String url_bnr = "https://www.bnr.ro/nbrfxrates.xml";
-    ProgressDialog progressDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -58,7 +64,6 @@ public class CursValutar extends Activity {
 
         initRV();
         registeredNetwork();
-        fetchXML();
     }
 
     private void InitComponents() {
@@ -82,6 +87,29 @@ public class CursValutar extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    protected void onStart() {
+        super.onStart();
+        compositeDisposable = new CompositeDisposable();
+        ProgressDialog progressDialog = new ProgressDialog(this,R.style.ProgressDialogStyle);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle("Procesare date");
+        String mesagge = new String("Datele se încarcă !");
+        progressDialog.setMessage(mesagge);
+        progressDialog.show();
+        compositeDisposable.add(Observable.timer(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> {
+                            fetchXML();
+                            progressDialog.hide();
+                        }
+                ));
     }
 
     public String getContentFromUrl() throws IOException {
@@ -131,10 +159,8 @@ public class CursValutar extends Activity {
         thread.start();
     }
 
-    private Thread worker;
-
     public void parsareXML(XmlPullParser parser) throws XmlPullParserException, IOException {
-                Thread thread = new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try{

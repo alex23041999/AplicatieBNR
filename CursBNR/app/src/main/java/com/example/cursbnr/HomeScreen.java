@@ -21,14 +21,12 @@ import com.example.cursbnr.IstoricRapoarte.Activitati.IstoricRapoarte;
 public class HomeScreen extends Activity {
     AppCompatButton CursInventar, GenerareRapoarte, IstoricRapoarte;
     BroadcastReceiver broadcastReceiver;
-    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         InitComponents();
-
 
         BtnCursInventarClick();
         BtnGenerareRapoarteClick();

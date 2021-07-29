@@ -1,7 +1,6 @@
 package com.example.cursbnr.GenerareRapoarte.Activitati;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -97,12 +96,17 @@ public class GenerareRapoarte extends AppCompatActivity {
     Map<String, Float> mapmin;
     Map<String, Float> mapmax;
     Intent intent;
+    boolean typeGrafic = false;
+    boolean typeLista = false;
+    boolean typeExist = false;
+    int i = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generare_rapoarte);
+
         InitComponents();
 
         valori = new ArrayList<>();
@@ -126,12 +130,31 @@ public class GenerareRapoarte extends AppCompatActivity {
         populateSpinnerAdapter();
     }
 
+    private void InitComponents() {
+        sp_selectaremoneda = findViewById(R.id.spinner_selectaremoneda);
+        tv_selectaremoneda = findViewById(R.id.tv_selectmoneda);
+        et_datastart = findViewById(R.id.et_datainceput);
+        et_datafinal = findViewById(R.id.et_datasfarsit);
+        btn_grafic = findViewById(R.id.btn_grafic);
+        btn_lista = findViewById(R.id.btn_lista);
+        linechart = findViewById(R.id.lc_grafic);
+        recyclerView_tipLista = findViewById(R.id.recycler_generarerapoarte);
+        linearLayout = findViewById(R.id.linearlayout_tiplista);
+        btn_salvare = findViewById(R.id.btn_salvare);
+    }
+
     @SuppressLint("CheckResult")
     @Override
     protected void onStart() {
         super.onStart();
         compositeDisposable = new CompositeDisposable();
-        ProgressDialog progressDialog = new ProgressDialog(this);
+        ProgressDialog progressDialog = new ProgressDialog(this,R.style.ProgressDialogStyle);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle("Procesare date");
+        String mesagge = new String("Datele se încarcă !");
+        progressDialog.setMessage(mesagge);
         progressDialog.show();
         compositeDisposable.add(Observable.timer(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.computation())
@@ -170,26 +193,15 @@ public class GenerareRapoarte extends AppCompatActivity {
             et_datafinal.setText(dataSfarsit);
         }
 
-        if(!tip.isEmpty()){
+        if (!tip.isEmpty()) {
             if (tip.equals("Tip grafic")) {
                 getValuesFromBNRForGrafic(moneda, dataInceput, dataSfarsit);
+                typeExist = true;
             } else if (tip.equals("Tip lista")) {
                 getValuesFromBNRForLista(moneda, dataInceput, dataSfarsit);
+                typeExist = true;
             }
         }
-    }
-
-    private void InitComponents() {
-        sp_selectaremoneda = findViewById(R.id.spinner_selectaremoneda);
-        tv_selectaremoneda = findViewById(R.id.tv_selectmoneda);
-        et_datastart = findViewById(R.id.et_datainceput);
-        et_datafinal = findViewById(R.id.et_datasfarsit);
-        btn_grafic = findViewById(R.id.btn_grafic);
-        btn_lista = findViewById(R.id.btn_lista);
-        linechart = findViewById(R.id.lc_grafic);
-        recyclerView_tipLista = findViewById(R.id.recycler_generarerapoarte);
-        linearLayout = findViewById(R.id.linearlayout_tiplista);
-        btn_salvare = findViewById(R.id.btn_salvare);
     }
 
     private void initRV() {
@@ -199,7 +211,7 @@ public class GenerareRapoarte extends AppCompatActivity {
             adapter = new RecyclerView_TipLista_Adapter(monede, intervale, min, max, this);
             recyclerView_tipLista.setAdapter(adapter);
 
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL); // linie delimitare randuri
             dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_recyclerview));
             recyclerView_tipLista.addItemDecoration(dividerItemDecoration);
         } catch (Exception e) {
@@ -232,11 +244,17 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     }
 
-    private void ClearAll() {
+    private void ClearGrafic() {
+        zile.clear();
+        valori.clear();
+    }
+
+    private void ClearLista() {
         monede.clear();
         intervale.clear();
         min.clear();
         max.clear();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -436,16 +454,17 @@ public class GenerareRapoarte extends AppCompatActivity {
                 if (isChecked) {
                     btn_lista.setChecked(false);
                     if (et_datastart.getText().toString().trim().equals("") || et_datafinal.getText().toString().trim().equals("")) {
-                        btn_grafic.setClickable(true);
                         Toast.makeText(GenerareRapoarte.this, "Completati toate campurile!", Toast.LENGTH_SHORT).show();
                         linechart.setVisibility(View.INVISIBLE);
                     } else if (CompareDates(et_datastart, et_datafinal) > 0) {
-                        btn_grafic.setClickable(true);
                         linechart.setVisibility(View.INVISIBLE);
                         Toast.makeText(GenerareRapoarte.this, "Selectati o ordine cronologica a datelor!", Toast.LENGTH_SHORT).show();
                     } else if (sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele") || sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda")) {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip grafic poate fi afisat doar pentru o moneda!", Toast.LENGTH_SHORT).show();
                     } else {
+                        ClearGrafic();
+                        typeGrafic = true;
+                        typeLista = false;
                         getValuesFromBNRForGrafic(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
@@ -461,16 +480,17 @@ public class GenerareRapoarte extends AppCompatActivity {
                 if (isChecked) {
                     btn_grafic.setChecked(false);
                     if (et_datastart.getText().toString().trim().equals("") || et_datafinal.getText().toString().trim().equals("")) {
-                        btn_lista.setClickable(true);
                         Toast.makeText(GenerareRapoarte.this, "Completati toate campurile!", Toast.LENGTH_SHORT).show();
                         linearLayout.setVisibility(View.INVISIBLE);
                     } else if (CompareDates(et_datastart, et_datafinal) > 0) {
-                        btn_lista.setClickable(true);
                         linechart.setVisibility(View.INVISIBLE);
                         Toast.makeText(GenerareRapoarte.this, "Selectati o ordine cronologica a datelor!", Toast.LENGTH_SHORT).show();
                     } else if (!sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele")) {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip lista poate fi afisat doar pentru toate monedele!", Toast.LENGTH_SHORT).show();
                     } else {
+                        ClearLista();
+                        typeLista = true;
+                        typeGrafic = false;
                         getValuesFromBNRForLista(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
@@ -484,7 +504,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         btn_salvare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btn_grafic.isClickable() == false) {
+                if (typeGrafic == true) {
                     Boolean result;
                     result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Tip grafic");
                     if (result) {
@@ -492,7 +512,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-                } else if (btn_lista.isClickable() == false) {
+                } else if (typeLista == true) {
                     Boolean result;
                     result = dateBaseHelper.insertValues("Toate monedele", et_datastart.getText().toString(), et_datafinal.getText().toString(), "Tip lista");
                     if (result) {
@@ -500,32 +520,15 @@ public class GenerareRapoarte extends AppCompatActivity {
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(GenerareRapoarte.this, "Selectati o varianta de afisare a raportului !", Toast.LENGTH_SHORT).show();
+                } else if (typeExist == true && typeLista == false && typeGrafic == false) {
+                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
+                } else if (typeLista == false && typeGrafic == false) {
+                    Toast.makeText(GenerareRapoarte.this, "Selectati o varianta de salvare a raportului !", Toast.LENGTH_SHORT).show();
+                } else if (typeExist == true && typeLista == false && typeGrafic == false) {
+                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    protected void registeredNetwork() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            registerReceiver(broadcastReceiver1, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        }
-    }
-
-    protected void unregisteredNetwork() {
-        try {
-            unregisterReceiver(broadcastReceiver1);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.dispose();
-        unregisteredNetwork();
     }
 
     public String GetContentFromUrl() throws IOException {
@@ -571,9 +574,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                             linearLayout.setVisibility(View.INVISIBLE);
                             btn_lista.setTextColor(Color.parseColor("#ff0000"));
                             btn_grafic.setTextColor(Color.parseColor("#7fff00"));
-                            btn_grafic.setClickable(false);
-                            btn_lista.setClickable(true);
-                            ClearAll();
+                            ClearLista();
                         } else {
                             linechart.setVisibility(View.INVISIBLE);
                             Toast.makeText(GenerareRapoarte.this, "Nu s-au gasit date!", Toast.LENGTH_SHORT).show();
@@ -708,9 +709,12 @@ public class GenerareRapoarte extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        progressDialog = new ProgressDialog(GenerareRapoarte.this);
-                        progressDialog.setMessage("Va rugam sa asteptati !");
+                        progressDialog = new ProgressDialog(GenerareRapoarte.this,R.style.ProgressDialogStyle);
                         progressDialog.setCancelable(false);
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        String mesagge = new String("Vă rugăm să așteptați !");
+                        progressDialog.setMessage(mesagge);
                         progressDialog.show();
                     }
                 });
@@ -769,8 +773,6 @@ public class GenerareRapoarte extends AppCompatActivity {
                             linechart.setVisibility(View.INVISIBLE);
                             btn_grafic.setTextColor(Color.parseColor("#ff0000"));
                             btn_lista.setTextColor(Color.parseColor("#7fff00"));
-                            btn_lista.setClickable(false);
-                            btn_grafic.setClickable(true);
                             adapter.notifyDataSetChanged();
                         } else {
                             linearLayout.setVisibility(View.INVISIBLE);
@@ -908,9 +910,12 @@ public class GenerareRapoarte extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        progressDialog = new ProgressDialog(GenerareRapoarte.this);
-                        progressDialog.setMessage("Va rugam sa asteptati !");
+                        progressDialog = new ProgressDialog(GenerareRapoarte.this,R.style.ProgressDialogStyle);
                         progressDialog.setCancelable(false);
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        String mesagge = new String("Vă rugăm să așteptați !");
+                        progressDialog.setMessage(mesagge);
                         progressDialog.show();
                     }
                 });
@@ -934,12 +939,25 @@ public class GenerareRapoarte extends AppCompatActivity {
         thread.start();
     }
 
-    public void ShowAlert(String title, ArrayList<String> message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message.toString());
-        builder.show();
+    protected void registeredNetwork() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerReceiver(broadcastReceiver1, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    protected void unregisteredNetwork() {
+        try {
+            unregisterReceiver(broadcastReceiver1);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+        unregisteredNetwork();
     }
 
 }

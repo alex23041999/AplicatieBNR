@@ -30,7 +30,6 @@ public class RecyclerCurs_Adapter extends RecyclerView.Adapter<RecyclerCurs_Adap
     @Override
     public RecyclerCurs_Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclewview_cursvalutar, parent, false);
-
         return new ViewHolder(view);
     }
 
