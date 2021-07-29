@@ -28,13 +28,13 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginLeft="10dp"
-            android:gravity="left" />
+            android:gravity="left|center" />
 
         <TextView
             android:id="@+id/tv_datacurenta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left|center"
             android:hint="Data curenta"
             android:textColor="#301473"
             android:textColorHint="#301473"

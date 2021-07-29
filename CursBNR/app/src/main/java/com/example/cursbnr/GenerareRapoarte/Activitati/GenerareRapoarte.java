@@ -1,17 +1,16 @@
 package com.example.cursbnr.GenerareRapoarte.Activitati;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,7 +38,6 @@ import com.example.cursbnr.GenerareRapoarte.Utile.RecyclerView_TipLista_Adapter;
 import com.example.cursbnr.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -62,16 +60,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ForkJoinWorkerThread;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+
 public class GenerareRapoarte extends AppCompatActivity {
+    private CompositeDisposable compositeDisposable;
     TextView tv_selectaremoneda;
-    static Spinner sp_selectaremoneda;
+    Spinner sp_selectaremoneda;
     DatePickerDialog datePickerDialog;
     EditText et_datastart, et_datafinal;
     LineChart linechart;
@@ -94,6 +96,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     DateBaseHelper dateBaseHelper;
     Map<String, Float> mapmin;
     Map<String, Float> mapmax;
+    Intent intent;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -121,6 +124,59 @@ public class GenerareRapoarte extends AppCompatActivity {
         registeredNetwork();
         SpinnerToast();
         populateSpinnerAdapter();
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    protected void onStart() {
+        super.onStart();
+        compositeDisposable = new CompositeDisposable();
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        compositeDisposable.add(Observable.timer(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> {
+                            istoricRapoarteIntent();
+                            progressDialog.hide();
+                        }
+                ));
+    }
+
+    private void istoricRapoarteIntent() {
+        intent = getIntent();
+
+        String tip = "";
+        if (intent.hasExtra("tip")) {
+            tip = intent.getStringExtra("tip");
+        }
+
+        String moneda = "";
+        if (intent.hasExtra("moneda")) {
+            moneda = intent.getStringExtra("moneda");
+            sp_selectaremoneda.setSelection(values.indexOf(moneda));
+        }
+
+        String dataInceput = "";
+        if (intent.hasExtra("dataInceput")) {
+            dataInceput = intent.getStringExtra("dataInceput");
+            et_datastart.setText(dataInceput);
+        }
+
+        String dataSfarsit = "";
+        if (intent.hasExtra("dataSfarsit")) {
+            dataSfarsit = intent.getStringExtra("dataSfarsit");
+            et_datafinal.setText(dataSfarsit);
+        }
+
+        if(!tip.isEmpty()){
+            if (tip.equals("Tip grafic")) {
+                getValuesFromBNRForGrafic(moneda, dataInceput, dataSfarsit);
+            } else if (tip.equals("Tip lista")) {
+                getValuesFromBNRForLista(moneda, dataInceput, dataSfarsit);
+            }
+        }
     }
 
     private void InitComponents() {
@@ -151,9 +207,9 @@ public class GenerareRapoarte extends AppCompatActivity {
         }
     }
 
-    private void SetIntervale() {
+    private void SetIntervale(String di, String ds) {
         for (int i = 0; i < monede.size(); i++) {
-            intervale.add(et_datastart.getText() + "\n" + et_datafinal.getText());
+            intervale.add(di + "\n" + ds);
         }
     }
 
@@ -186,7 +242,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void populateSpinnerAdapter() {
         values.add("Selectare moneda");
-        values.add("Toate Monedele");
+        values.add("Toate monedele");
         fetchXML();
         ArrayAdapter<String> adapter_spinner = new ArrayAdapter<>(this, R.layout.spinner_style, values);
         adapter_spinner.setDropDownViewResource(R.layout.dropdown_itembackground);
@@ -387,10 +443,10 @@ public class GenerareRapoarte extends AppCompatActivity {
                         btn_grafic.setClickable(true);
                         linechart.setVisibility(View.INVISIBLE);
                         Toast.makeText(GenerareRapoarte.this, "Selectati o ordine cronologica a datelor!", Toast.LENGTH_SHORT).show();
-                    } else if (sp_selectaremoneda.getSelectedItem().toString().equals("Toate Monedele") || sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda")) {
+                    } else if (sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele") || sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda")) {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip grafic poate fi afisat doar pentru o moneda!", Toast.LENGTH_SHORT).show();
                     } else {
-                        getValuesFromBNRForGrafic();
+                        getValuesFromBNRForGrafic(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
                 }
@@ -412,10 +468,10 @@ public class GenerareRapoarte extends AppCompatActivity {
                         btn_lista.setClickable(true);
                         linechart.setVisibility(View.INVISIBLE);
                         Toast.makeText(GenerareRapoarte.this, "Selectati o ordine cronologica a datelor!", Toast.LENGTH_SHORT).show();
-                    } else if (!sp_selectaremoneda.getSelectedItem().toString().equals("Toate Monedele")) {
+                    } else if (!sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele")) {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip lista poate fi afisat doar pentru toate monedele!", Toast.LENGTH_SHORT).show();
                     } else {
-                        getValuesFromBNRForLista();
+                        getValuesFromBNRForLista(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
                     //
@@ -468,6 +524,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        compositeDisposable.dispose();
         unregisteredNetwork();
     }
 
@@ -495,8 +552,7 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     private Thread worker;
 
-    public void ParsareRaportXMLForGrafic(XmlPullParser parser) throws XmlPullParserException, IOException {
-        //parsare xml
+    public void ParsareRaportXMLForGrafic(XmlPullParser parser, String m, String di, String ds) throws XmlPullParserException, IOException {
         final int[] event = {parser.getEventType()};
         final String[] date = {new String()};
         MonedaValoare monedaValoare = new MonedaValoare();
@@ -545,8 +601,8 @@ public class GenerareRapoarte extends AppCompatActivity {
                                 Date data = null;
                                 try {
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                    begin = dateFormat.parse(et_datastart.getText().toString());
-                                    end = dateFormat.parse(et_datafinal.getText().toString());
+                                    begin = dateFormat.parse(di);
+                                    end = dateFormat.parse(ds);
                                     data = dateFormat.parse(date[0]);
                                     Calendar calendarStart = Calendar.getInstance();
                                     calendarStart.setTime(begin);
@@ -555,7 +611,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                                     Calendar calendarData = Calendar.getInstance();
                                     calendarData.setTime(data);
                                     if (calendarData.before(calendarStart)) {
-                                        //parser.nextText();
+
                                     } else {
                                         linie_curenta[0] = new MonedaValoare();
                                     }
@@ -577,8 +633,8 @@ public class GenerareRapoarte extends AppCompatActivity {
                                         Date data = null;
                                         try {
                                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                            begin = dateFormat.parse(et_datastart.getText().toString());
-                                            end = dateFormat.parse(et_datafinal.getText().toString());
+                                            begin = dateFormat.parse(di);
+                                            end = dateFormat.parse(ds);
                                             data = dateFormat.parse(date[0]);
                                             Calendar calendarStart = Calendar.getInstance();
                                             calendarStart.setTime(begin);
@@ -590,7 +646,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                                                     || calendarData.equals(calendarStart)
                                                     || calendarData.equals(calendarFinal))) {
 
-                                                if (sp_selectaremoneda.getSelectedItem().toString().equals(parser.getAttributeValue(null, "currency"))) {
+                                                if (m.equals(parser.getAttributeValue(null, "currency"))) {
                                                     valori.add(parser.nextText());
                                                     zile.add(date[0]);
                                                     isDownload = true;
@@ -644,7 +700,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         worker.start();
     }
 
-    public void getValuesFromBNRForGrafic() {
+    public void getValuesFromBNRForGrafic(String m, String di, String ds) {
         Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -666,7 +722,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                     XmlPullParser parser = xmlPullParserFactory.newPullParser();
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                     parser.setInput(is, null);
-                    ParsareRaportXMLForGrafic(parser);
+                    ParsareRaportXMLForGrafic(parser, m, di, ds);
                     if (is != null) {
                         is.close();
                     }
@@ -680,7 +736,7 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     private Thread worker1;
 
-    public void ParsareRaportXMLForLista(XmlPullParser parser) throws XmlPullParserException, IOException {
+    public void ParsareRaportXMLForLista(XmlPullParser parser, String m, String di, String ds) throws XmlPullParserException, IOException {
         //parsare xml
         mapmin = new LinkedHashMap<>();
         mapmax = new LinkedHashMap<>();
@@ -705,7 +761,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                                 max.add(map1.getValue());
                             }
                             monede = (ArrayList<String>) monede.stream().sorted().collect(Collectors.toList());
-                            SetIntervale();
+                            SetIntervale(di, ds);
                             progressDialog.hide();
                             valori.clear();
                             zile.clear();
@@ -742,8 +798,8 @@ public class GenerareRapoarte extends AppCompatActivity {
                                 Date data = null;
                                 try {
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                    begin = dateFormat.parse(et_datastart.getText().toString());
-                                    end = dateFormat.parse(et_datafinal.getText().toString());
+                                    begin = dateFormat.parse(di);
+                                    end = dateFormat.parse(ds);
                                     data = dateFormat.parse(date[0]);
                                     Calendar calendarStart = Calendar.getInstance();
                                     calendarStart.setTime(begin);
@@ -774,8 +830,8 @@ public class GenerareRapoarte extends AppCompatActivity {
                                         Date data = null;
                                         try {
                                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                            begin = dateFormat.parse(et_datastart.getText().toString());
-                                            end = dateFormat.parse(et_datafinal.getText().toString());
+                                            begin = dateFormat.parse(di);
+                                            end = dateFormat.parse(ds);
                                             data = dateFormat.parse(date[0]);
                                             Calendar calendarStart = Calendar.getInstance();
                                             calendarStart.setTime(begin);
@@ -844,7 +900,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         worker1.start();
     }
 
-    public void getValuesFromBNRForLista() {
+    public void getValuesFromBNRForLista(String m, String di, String ds) {
         Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -866,7 +922,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                     XmlPullParser parser = xmlPullParserFactory.newPullParser();
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                     parser.setInput(is, null);
-                    ParsareRaportXMLForLista(parser);
+                    ParsareRaportXMLForLista(parser, m, di, ds);
                     if (is != null) {
                         is.close();
                     }
@@ -878,36 +934,6 @@ public class GenerareRapoarte extends AppCompatActivity {
         thread.start();
     }
 
-    //    public void addDateToDateBase(){
-//        boolean inserted = myDateBase.insertValues(et_datastart.getText().toString(),sp_selectaremoneda.getSelectedItem().toString(),et_datafinal.getText().toString());
-//        if(inserted == true)
-//            Toast.makeText(GenerareRapoarte.this,"Date inserate cu succes",Toast.LENGTH_SHORT).show();
-//        else
-//            Toast.makeText(GenerareRapoarte.this,"Datele nu au fost inserate",Toast.LENGTH_SHORT).show();
-//    }
-//    public void updateDate(){
-//        boolean isUpdated = myDateBase.updateDate(et_datastart.getText().toString(),sp_selectaremoneda.getSelectedItem().toString(),et_datafinal.getText().toString());
-//        if(isUpdated == true)
-//            Toast.makeText(GenerareRapoarte.this,"Date updatate",Toast.LENGTH_SHORT).show();
-//        else
-//            Toast.makeText(GenerareRapoarte.this,"Datele nu au fost updatate",Toast.LENGTH_SHORT).show();
-//    }
-//
-//    public void seeAllDateFromDateBase() {
-//        Cursor cursor = myDateBase.getAllDate();
-//        if (cursor.getCount() == 0) {
-//            ShowAlert("Eroare", "Nimic gasit");
-//            return;
-//        }
-//        StringBuffer buffer = new StringBuffer();
-//        while (cursor.moveToNext()) {
-//            buffer.append("Data: " + cursor.getString(0) + "\n");
-//            buffer.append("Moneda: " + cursor.getString(1) + "\n");
-//            buffer.append("Valoare: " + cursor.getString(2) + "\n\n");
-//        }
-//        ShowAlert("Date ", buffer.toString());
-//    }
-//
     public void ShowAlert(String title, ArrayList<String> message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);

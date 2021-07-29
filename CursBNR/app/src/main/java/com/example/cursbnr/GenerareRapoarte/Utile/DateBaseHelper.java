@@ -86,12 +86,14 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-//    public void DeleteDatas(){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        try (Cursor cursor = db.rawQuery()){
-//
-//        }
-//    }
+    public void DeleteDatas() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String delete = "DELETE FROM History_Raports WHERE ROWID IN (SELECT ROWID FROM History_Raports ORDER BY ROWID DESC LIMIT -1 OFFSET 10)";
+        db.execSQL(delete);
+        //String del = "DELETE FROM History_Raports";
+        //db.execSQL(del);
+    }
+
     public ArrayList<String> GetTip() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> mon = new ArrayList<>();
@@ -112,11 +114,6 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_TipRaport, tipraport);
         db.update(TABLE_NAME, contentValues, "MONEDA= ?", new String[]{moneda});
         return true;
-    }
-
-    public Integer deleteDate(String data) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "DATA = ?", new String[]{data});
     }
 
     public void clearDatabase(String TABLE_NAME) {

@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.cursbnr.R;
 
@@ -20,14 +19,13 @@ public class CheckingConnection extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-        if(isConnectedOrNot(context)){
-            //Toast.makeText(context, "You are connected to the internet!", Toast.LENGTH_SHORT).show();
-        }else{
+        if (isConnectedOrNot(context)) {
+        } else {
             showAlert();
         }
     }
 
-    public boolean isConnectedOrNot(Context context){
+    public boolean isConnectedOrNot(Context context) {
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -38,20 +36,20 @@ public class CheckingConnection extends BroadcastReceiver {
         }
     }
 
-    public void showAlert(){
+    public void showAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.internet_alert,null);
+        View view = layoutInflater.inflate(R.layout.internet_alert, null);
         Button btn_ok = view.findViewById(R.id.btn_ok);
         builder.setView(view);
         builder.setCancelable(false);
 
-        final Dialog dialog =builder.create();
+        final Dialog dialog = builder.create();
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnectedOrNot(mContext)){
-                dialog.dismiss();
+                if (isConnectedOrNot(mContext)) {
+                    dialog.dismiss();
                 }
             }
         });

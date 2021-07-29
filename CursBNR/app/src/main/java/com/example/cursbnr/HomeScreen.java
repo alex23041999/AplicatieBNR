@@ -15,12 +15,11 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.example.cursbnr.CursValutar.Activitati.CursValutar;
 import com.example.cursbnr.CursValutar.Utile.CheckingConnection;
 import com.example.cursbnr.GenerareRapoarte.Activitati.GenerareRapoarte;
-import com.example.cursbnr.GenerareRapoarte.Utile.MyAsyncTask;
 import com.example.cursbnr.IstoricRapoarte.Activitati.IstoricRapoarte;
 
 
 public class HomeScreen extends Activity {
-    AppCompatButton CursInventar,GenerareRapoarte,IstoricRapoarte;
+    AppCompatButton CursInventar, GenerareRapoarte, IstoricRapoarte;
     BroadcastReceiver broadcastReceiver;
     ProgressDialog progressDialog;
 
@@ -37,14 +36,14 @@ public class HomeScreen extends Activity {
         registeredNetwork();
     }
 
-    private void InitComponents(){
+    private void InitComponents() {
         CursInventar = findViewById(R.id.btn_cursvalutar);
         GenerareRapoarte = findViewById(R.id.btn_generarerapoarte);
         IstoricRapoarte = findViewById(R.id.btn_istoricrapoarte);
         broadcastReceiver = new CheckingConnection();
     }
 
-    private void BtnCursInventarClick(){
+    private void BtnCursInventarClick() {
         CursInventar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +53,7 @@ public class HomeScreen extends Activity {
         });
     }
 
-    private void BtnGenerareRapoarteClick(){
+    private void BtnGenerareRapoarteClick() {
         GenerareRapoarte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +63,7 @@ public class HomeScreen extends Activity {
         });
     }
 
-    private void BtnIstoricRapoarteClick(){
+    private void BtnIstoricRapoarteClick() {
         IstoricRapoarte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,14 +73,14 @@ public class HomeScreen extends Activity {
         });
     }
 
-    protected void registeredNetwork(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+    protected void registeredNetwork() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
     }
 
-    protected void unregisteredNetwork(){
-        try{
+    protected void unregisteredNetwork() {
+        try {
             unregisterReceiver(broadcastReceiver);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -93,7 +92,5 @@ public class HomeScreen extends Activity {
         super.onDestroy();
         unregisteredNetwork();
     }
-
-
 
 }

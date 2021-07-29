@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cursbnr.R;
@@ -21,17 +20,18 @@ public class RecyclerView_TipLista_Adapter extends RecyclerView.Adapter<Recycler
     private List<Float> maxim;
     private Context context;
 
-    public RecyclerView_TipLista_Adapter(List<String> monede,List<String> intervale,List<Float>minim,List<Float>maxim,Context context){
+    public RecyclerView_TipLista_Adapter(List<String> monede, List<String> intervale, List<Float> minim, List<Float> maxim, Context context) {
         this.monede = monede;
         this.intervale = intervale;
         this.minim = minim;
         this.maxim = maxim;
         this.context = context;
     }
+
     @Override
     public RecyclerView_TipLista_Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_tiplista,parent, false);
-       return new ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_tiplista, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -48,18 +48,21 @@ public class RecyclerView_TipLista_Adapter extends RecyclerView.Adapter<Recycler
 
     @Override
     public int getItemCount() {
-        while (maxim.size()< monede.size())
+        while (maxim.size() < monede.size())
             maxim.add(Float.valueOf(0));
-        while(monede.size()<maxim.size())
+        while (monede.size() < maxim.size())
             monede.add("Moneda nevalabila");
-        if(monede.size()>=maxim.size())
-        {return monede.size();}
-        else {return maxim.size();}
+        if (monede.size() >= maxim.size()) {
+            return monede.size();
+        } else {
+            return maxim.size();
+        }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvmoneda,tvinterval,tvmin,tvmax;
-        public ViewHolder(View itemView){
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvmoneda, tvinterval, tvmin, tvmax;
+
+        public ViewHolder(View itemView) {
             super(itemView);
             tvmoneda = itemView.findViewById(R.id.tv_tiplista_moneda);
             tvinterval = itemView.findViewById(R.id.tv_tiplista_interval);

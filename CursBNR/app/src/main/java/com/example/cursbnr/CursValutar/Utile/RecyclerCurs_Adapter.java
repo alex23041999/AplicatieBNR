@@ -1,19 +1,16 @@
 package com.example.cursbnr.CursValutar.Utile;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cursbnr.R;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class RecyclerCurs_Adapter extends RecyclerView.Adapter<RecyclerCurs_Adapter.ViewHolder> {
