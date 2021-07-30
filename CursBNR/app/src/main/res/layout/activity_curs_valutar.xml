@@ -6,7 +6,7 @@
     android:background="@drawable/backgroundstyle"
     android:orientation="vertical"
     android:weightSum="2"
-    tools:context=".CursValutar.Activitati.CursValutar">
+    tools:context=".CursBNR.CursValutar.Activitati.CursValutar">
 
     <LinearLayout
         android:layout_width="match_parent"

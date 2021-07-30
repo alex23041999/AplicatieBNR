@@ -1,4 +1,4 @@
-package com.example.cursbnr.CursValutar.Activitati;
+package com.example.cursbnr.CursBNR.CursValutar.Activitati;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,17 +8,15 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cursbnr.CursValutar.Utile.CheckingConnection;
-import com.example.cursbnr.CursValutar.Utile.RecyclerCurs_Adapter;
-import com.example.cursbnr.CursValutar.Utile.UrlParser;
-import com.example.cursbnr.GenerareRapoarte.Activitati.GenerareRapoarte;
+import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
+import com.example.cursbnr.CursBNR.CursValutar.Utile.RecyclerCurs_Adapter;
+import com.example.cursbnr.CursBNR.CursValutar.Utile.UrlParser;
 import com.example.cursbnr.R;
 
 import org.xmlpull.v1.XmlPullParser;

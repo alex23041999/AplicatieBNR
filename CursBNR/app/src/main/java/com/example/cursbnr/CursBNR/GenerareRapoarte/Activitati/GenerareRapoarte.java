@@ -1,4 +1,4 @@
-package com.example.cursbnr.GenerareRapoarte.Activitati;
+package com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -29,11 +29,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cursbnr.CursValutar.Utile.CheckingConnection;
-import com.example.cursbnr.CursValutar.Utile.UrlParser;
-import com.example.cursbnr.GenerareRapoarte.Utile.DateBaseHelper;
-import com.example.cursbnr.GenerareRapoarte.Utile.MonedaValoare;
-import com.example.cursbnr.GenerareRapoarte.Utile.RecyclerView_TipLista_Adapter;
+import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
+import com.example.cursbnr.CursBNR.CursValutar.Utile.UrlParser;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.MonedaValoare;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.RecyclerView_TipLista_Adapter;
 import com.example.cursbnr.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;

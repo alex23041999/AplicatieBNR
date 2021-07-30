@@ -1,11 +1,11 @@
-package com.example.cursbnr.GenerareRapoarte.Utile;
+package com.example.cursbnr.CursBNR.GenerareRapoarte.Utile;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Handler;
 
-import com.example.cursbnr.GenerareRapoarte.Activitati.GenerareRapoarte;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte;
 
 public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
     ProgressDialog progressDialog;

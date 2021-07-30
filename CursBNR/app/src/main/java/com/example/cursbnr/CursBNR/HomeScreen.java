@@ -1,7 +1,6 @@
-package com.example.cursbnr;
+package com.example.cursbnr.CursBNR;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,10 +11,11 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.example.cursbnr.CursValutar.Activitati.CursValutar;
-import com.example.cursbnr.CursValutar.Utile.CheckingConnection;
-import com.example.cursbnr.GenerareRapoarte.Activitati.GenerareRapoarte;
-import com.example.cursbnr.IstoricRapoarte.Activitati.IstoricRapoarte;
+import com.example.cursbnr.CursBNR.CursValutar.Activitati.CursValutar;
+import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte;
+import com.example.cursbnr.CursBNR.IstoricRapoarte.Activitati.IstoricRapoarte;
+import com.example.cursbnr.R;
 
 
 public class HomeScreen extends Activity {

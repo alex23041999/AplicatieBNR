@@ -1,4 +1,4 @@
-package com.example.cursbnr.CursValutar.Utile;
+package com.example.cursbnr.CursBNR.CursValutar.Utile;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

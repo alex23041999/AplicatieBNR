@@ -1,4 +1,4 @@
-package com.example.cursbnr.GenerareRapoarte.Utile;
+package com.example.cursbnr.CursBNR.GenerareRapoarte.Utile;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+
+import com.example.cursbnr.Inventar.Utile.ObjectInventar;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,24 +19,34 @@ import java.util.ArrayList;
 //dupa fiecare modificare a elementelor bazei de date(coloane, nume tabel..), reinstalez aplicatia pe telefon
 public class DateBaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "CursBNRRapoarte.db";
+
     public static final String TABLE_NAME = "History_Raports";
     public static final String COL_Moneda = "Moneda";
     public static final String COL_DataStart = "DataStart";
     public static final String COL_DataSfarsit = "DataSfarsit";
     public static final String COL_TipRaport = "TipRaport";
 
+    public static final String TABLE_NAME1 = "Inventar";
+    public static final String COL_ID = "Id";
+    public static final String COL_Denumire = "Denumire";
+    public static final String COL_Pret = "Pret";
+    public static final String COL_CodBare = "CodBare";
+    public static final String COL_Cantitate = "Cantitate";
+
     public DateBaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 2);
+        super(context, DATABASE_NAME, null, 4);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(" create table " + TABLE_NAME + "(Moneda TEXT, DataStart TEXT, DataSfarsit TEXT,TipRaport TEXT)");
+        db.execSQL(" create table " + TABLE_NAME1 + "(Id INTEGER PRIMARY KEY AUTOINCREMENT, Denumire TEXT , Pret FLOAT , CodBare TEXT, Cantitate FLOAT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME1);
         onCreate(db);
     }
 
@@ -51,6 +63,19 @@ public class DateBaseHelper extends SQLiteOpenHelper {
             return false;
         else
             return true;
+    }
+
+    public boolean insertValuesInventar(ObjectInventar objectInventar) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_Denumire, objectInventar.getDenumire());
+        contentValues.put(COL_Pret, objectInventar.getPret());
+        contentValues.put(COL_CodBare, objectInventar.getCodbare());
+        contentValues.put(COL_Cantitate, objectInventar.getCantitate());
+        long result = db.insert(TABLE_NAME1, null, contentValues);
+        copyDbToExternal();
+
+        return result != -1;
     }
 
     public ArrayList<String> GetMonede() {
@@ -90,7 +115,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String delete = "DELETE FROM History_Raports WHERE ROWID IN (SELECT ROWID FROM History_Raports ORDER BY ROWID DESC LIMIT -1 OFFSET 10)";
         db.execSQL(delete);
-        //String del = "DELETE FROM History_Raports";
+        //String del = "DELETE FROM Inventar";
         //db.execSQL(del);
     }
 
@@ -116,10 +141,12 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public void clearDatabase(String TABLE_NAME) {
+    public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
         String clearDBQuery = "DELETE FROM " + TABLE_NAME;
+        String clear = "DELETE FROM " + TABLE_NAME1;
         db.execSQL(clearDBQuery);
+        db.execSQL(clear);
     }
 
     public static void copyDbToExternal() {

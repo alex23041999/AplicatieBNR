@@ -1,4 +1,4 @@
-package com.example.cursbnr.IstoricRapoarte.Utile;
+package com.example.cursbnr.CursBNR.IstoricRapoarte.Utile;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cursbnr.IstoricRapoarte.listener.OnRecyclerViewRowClick;
+import com.example.cursbnr.CursBNR.IstoricRapoarte.listener.OnRecyclerViewRowClick;
 import com.example.cursbnr.R;
 
 import java.util.List;

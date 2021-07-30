@@ -6,7 +6,7 @@
     android:background="@drawable/backgroundstyle"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context=".GenerareRapoarte.Activitati.GenerareRapoarte">
+    tools:context=".CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.cursbnr">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission
         android:name="android.permission.SET_DEBUG_APP"
         tools:ignore="ProtectedPermissions" />
@@ -18,25 +18,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
-        <receiver android:name=".CursValutar.Utile.CheckingConnection">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
-        <activity android:name=".IstoricRapoarte.Activitati.IstoricRapoarte"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".GenerareRapoarte.Activitati.GenerareRapoarte"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".CursValutar.Activitati.CursValutar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".HomeScreen"
-            android:screenOrientation="portrait">
+        <activity android:name=".Inventar.Inventar"></activity>
+        <activity android:name=".InterfataPrincipala">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".CursBNR.CursValutar.Utile.CheckingConnection">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".CursBNR.IstoricRapoarte.Activitati.IstoricRapoarte"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CursBNR.CursValutar.Activitati.CursValutar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CursBNR.HomeScreen"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

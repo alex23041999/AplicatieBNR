@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="4"
+    android:background="@drawable/background_recyclerview">
+
+    <TextView
+        android:id="@+id/denumire_produs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Denumire"
+        android:gravity="center"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/pret_produs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pret"
+        android:gravity="center"
+        android:layout_weight="1.1"/>
+    <TextView
+        android:id="@+id/codbare_produs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cod bare"
+        android:gravity="center"
+        android:layout_weight="0.9"/>
+    <EditText
+        android:id="@+id/cantitate_produs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cantitate"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:inputType="numberDecimal"/>
+
+</LinearLayout>

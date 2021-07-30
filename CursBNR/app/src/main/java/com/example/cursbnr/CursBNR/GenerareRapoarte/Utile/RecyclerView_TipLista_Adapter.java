@@ -1,4 +1,4 @@
-package com.example.cursbnr.GenerareRapoarte.Utile;
+package com.example.cursbnr.CursBNR.GenerareRapoarte.Utile;
 
 import android.content.Context;
 import android.view.LayoutInflater;

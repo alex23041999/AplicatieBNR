@@ -1,4 +1,4 @@
-package com.example.cursbnr.IstoricRapoarte.Activitati;
+package com.example.cursbnr.CursBNR.IstoricRapoarte.Activitati;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cursbnr.CursValutar.Utile.CheckingConnection;
-import com.example.cursbnr.GenerareRapoarte.Activitati.GenerareRapoarte;
-import com.example.cursbnr.GenerareRapoarte.Utile.DateBaseHelper;
-import com.example.cursbnr.IstoricRapoarte.Utile.RecyclerView_Istoric_Adapter;
-import com.example.cursbnr.IstoricRapoarte.listener.OnRecyclerViewRowClick;
+import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
+import com.example.cursbnr.CursBNR.IstoricRapoarte.Utile.RecyclerView_Istoric_Adapter;
+import com.example.cursbnr.CursBNR.IstoricRapoarte.listener.OnRecyclerViewRowClick;
 import com.example.cursbnr.R;
 
 import java.util.ArrayList;
