@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -79,6 +78,32 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    public boolean isEmpty() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean empty = false;
+        Cursor cursor = db.rawQuery("SELECT * FROM Inventar", null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (cursor.getInt(0) == 0) {
+                empty = true;
+            }
+        }
+        return empty;
+    }
+
+    public ArrayList<ObjectInventar> getObjects(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<ObjectInventar> objectInventars = new ArrayList<>();
+        int i=0;
+        try(Cursor cursor = db.rawQuery("SELECT * FROM Inventar LIMIT 15 OFFSET(SELECT COUNT (*) FROM Inventar)-15;",null)){
+            while (cursor.moveToNext()){
+                objectInventars.add(i, new ObjectInventar(cursor.getString(1),cursor.getFloat(2),cursor.getString(3),cursor.getFloat(4)));
+                i++;
+            }
+        }
+        return objectInventars;
+    }
+
     public ArrayList<String> GetMonede() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> mon = new ArrayList<>();
@@ -112,6 +137,17 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<String> GetTip() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> mon = new ArrayList<>();
+        try (Cursor cursor = db.rawQuery("SELECT TipRaport FROM History_Raports LIMIT 10 OFFSET (SELECT COUNT(*) FROM History_Raports)-10;", null)) {
+            while (cursor.moveToNext()) {
+                mon.add(cursor.getString(0));
+            }
+            return mon;
+        }
+    }
+
     public void DeleteDatas() {
         SQLiteDatabase db = this.getWritableDatabase();
         String delete = "DELETE FROM History_Raports WHERE ROWID IN (SELECT ROWID FROM History_Raports ORDER BY ROWID DESC LIMIT -1 OFFSET 10)";
@@ -126,17 +162,6 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         db.execSQL(del);
     }
 
-    public ArrayList<String> GetTip()  {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<String> mon = new ArrayList<>();
-        try (Cursor cursor = db.rawQuery("SELECT TipRaport FROM History_Raports LIMIT 10 OFFSET (SELECT COUNT(*) FROM History_Raports)-10;", null)) {
-            while (cursor.moveToNext()) {
-                mon.add(cursor.getString(0));
-            }
-            return mon;
-        }
-    }
-
     public boolean updateDate(String moneda, String datainceput, String datasfarsit, String tipraport) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -148,11 +173,12 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateDataBaseInventar(String denumire,Float cantitateNoua){
+    public boolean updateDataBaseInventar(String denumire, Float cantitateNoua) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_Cantitate,cantitateNoua);
-        db.update(TABLE_NAME1,contentValues,"Denumire= "+denumire,new String[] {denumire});
+        contentValues.put(COL_Cantitate, cantitateNoua);
+        db.update(TABLE_NAME1, contentValues, "Denumire ='" + denumire +"'",null);
+//        db.execSQL("UPDATE Inventar SET Cantitate='cantitateNoua' WHERE Denumire='denumire'");
         return true;
     }
 

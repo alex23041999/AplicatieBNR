@@ -1,7 +1,7 @@
 package com.example.cursbnr.Inventar.Utile;
 
 public class ObjectInventar {
-    Float cantitate;
+   private Float cantitate;
     String codbare;
     String denumire;
     Float pret;

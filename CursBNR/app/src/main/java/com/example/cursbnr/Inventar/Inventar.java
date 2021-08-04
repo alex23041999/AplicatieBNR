@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -21,10 +24,12 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
+import com.example.cursbnr.Inventar.Listener.OnRecyclerViewRow;
 import com.example.cursbnr.Inventar.Utile.FakeApiResponse;
 import com.example.cursbnr.Inventar.Utile.JsonFakeApi;
 import com.example.cursbnr.Inventar.Utile.ObjectInventar;
@@ -45,7 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Inventar extends Activity implements RecyclerViewInventar_Adapter.OnNoteListener {
+public class Inventar extends Activity implements OnRecyclerViewRow {
     private CompositeDisposable compositeDisposable;
     BroadcastReceiver broadcastReceiver;
     Button btn_scanare, btn_salvareCVS;
@@ -55,7 +60,7 @@ public class Inventar extends Activity implements RecyclerViewInventar_Adapter.O
     View inflatedView;
     DateBaseHelper dateBaseHelper1;
     List<ObjectInventar> objectInventars;
-    LinearLayout linearLayout;
+    RecyclerView.SmoothScroller smoothScroller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +71,20 @@ public class Inventar extends Activity implements RecyclerViewInventar_Adapter.O
         objectInventars = new ArrayList<>();
         broadcastReceiver = new CheckingConnection();
         dateBaseHelper1 = new DateBaseHelper(Inventar.this);
+        smoothScroller = new
+                LinearSmoothScroller(this.getApplicationContext()) {
+                    @Override
+                    protected int getVerticalSnapPreference() {
+                        return LinearSmoothScroller.SNAP_TO_START;
+                    }
+                };
 
         registeredNetwork();
         initRV();
+        initRvElements();
         doneKeyboardCodBare();
         doneKeyboardCantitate();
+        editTextCodbare();
     }
 
     private void initComponents() {
@@ -81,13 +95,71 @@ public class Inventar extends Activity implements RecyclerViewInventar_Adapter.O
         et_codBare = findViewById(R.id.et_codbare);
         inflatedView = getLayoutInflater().inflate(R.layout.recyclerview_inventar, null);
         et_cantitate = inflatedView.findViewById(R.id.cantitate_produs);
-        linearLayout = findViewById(R.id.linearlayout_inventar);
     }
 
-    protected void onStart() {
-        super.onStart();
+   // protected void onStart() {
+//        super.onStart();
+//        compositeDisposable = new CompositeDisposable();
+//        ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
+//        progressDialog.setCancelable(false);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.setTitle("Procesare date");
+//        String mesagge = new String("Datele se încarcă !");
+//        progressDialog.setMessage(mesagge);
+//        progressDialog.show();
+//        compositeDisposable.add(Observable.timer(2, TimeUnit.SECONDS)
+//                .subscribeOn(Schedulers.computation())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        result -> {
+//                            retrofit();
+//                            progressDialog.hide();
+//                        }
+//                ));
+    //}
+
+    private void editTextCodbare(){
+        et_codBare.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //filter(s.toString());
+                int i = 0;
+                for (ObjectInventar item : objectInventars) {
+                    if (item.getCodbare().equals(s.toString())) {
+                        i = objectInventars.indexOf(item);
+                    }
+                }
+                smoothScroller.setTargetPosition(i);
+                recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+//    private void filter(String text) {
+//        ArrayList<ObjectInventar> objectInventars1 = new ArrayList<>();
+//        for (ObjectInventar item : objectInventars) {
+//            if (item.getCodbare().equals(text)) {
+//                objectInventars1.add(item);
+//            }
+//        }
+//        adapter.filterList(objectInventars1);
+//    }
+
+    private void initRvElements(){
         compositeDisposable = new CompositeDisposable();
-        ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
+        ProgressDialog progressDialog = new ProgressDialog(Inventar.this, R.style.ProgressDialogStyle);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -100,7 +172,13 @@ public class Inventar extends Activity implements RecyclerViewInventar_Adapter.O
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         result -> {
-                            retrofit();
+                            if(!dateBaseHelper1.isEmpty()){
+                                objectInventars.clear();
+                                for(int i=0;i<dateBaseHelper1.getObjects().size();i++){
+                                    objectInventars.add(i,dateBaseHelper1.getObjects().get(i));
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
                             progressDialog.hide();
                         }
                 ));
@@ -116,13 +194,16 @@ public class Inventar extends Activity implements RecyclerViewInventar_Adapter.O
                     Toast.makeText(Inventar.this, "" + response.code(), Toast.LENGTH_SHORT).show();
                 }else{
                     try {
-                        objectInventars.clear();
-                        for(int i=0; i < response.body().produse.size(); i++){
-                            dateBaseHelper1.insertValuesInventar(response.body().produse.get(i));
-                        }
-                        dateBaseHelper1.DeleteDatasInventar();
-                        objectInventars.addAll(Objects.requireNonNull(response.body()).produse);
-                        adapter.notifyDataSetChanged();
+//                        for(int i=0; i < response.body().produse.size(); i++){
+//                            dateBaseHelper1.insertValuesInventar(response.body().produse.get(i));
+//                        }
+//                        dateBaseHelper1.DeleteDatasInventar();
+//                        if(!dateBaseHelper1.isEmpty()){
+//                            for(int i=0;i<dateBaseHelper1.getObjects().size();i++){
+//                                objectInventars.add(i,dateBaseHelper1.getObjects().get(i));
+//                            }
+//                        }
+//                        adapter.notifyDataSetChanged();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -148,16 +229,6 @@ public class Inventar extends Activity implements RecyclerViewInventar_Adapter.O
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    private void insertDatabase() {
-        for (int i = 0; i < objectInventars.size(); i++) {
-            dateBaseHelper1.insertValuesInventar(objectInventars.get(i));
-        }
-    }
-
-    @Override
-    public void OnNoteClick(int position) {
     }
 
     private void doneKeyboardCantitate() {
@@ -217,4 +288,7 @@ public class Inventar extends Activity implements RecyclerViewInventar_Adapter.O
         unregisteredNetwork();
     }
 
+    @Override
+    public void onClick(int rowCount) {
+    }
 }
