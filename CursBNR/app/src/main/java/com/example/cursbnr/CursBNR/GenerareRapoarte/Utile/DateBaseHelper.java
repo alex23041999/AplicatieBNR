@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -115,11 +116,17 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String delete = "DELETE FROM History_Raports WHERE ROWID IN (SELECT ROWID FROM History_Raports ORDER BY ROWID DESC LIMIT -1 OFFSET 10)";
         db.execSQL(delete);
-        //String del = "DELETE FROM Inventar";
-        //db.execSQL(del);
+        String del = "DELETE FROM Inventar WHERE ROWID IN (SELECT ROWID FROM Inventar ORDER BY ROWID DESC LIMIT -1 OFFSET 15)";
+        db.execSQL(del);
     }
 
-    public ArrayList<String> GetTip() {
+    public void DeleteDatasInventar() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String del = "DELETE FROM Inventar WHERE ROWID IN (SELECT ROWID FROM Inventar ORDER BY ROWID DESC LIMIT -1 OFFSET 15)";
+        db.execSQL(del);
+    }
+
+    public ArrayList<String> GetTip()  {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> mon = new ArrayList<>();
         try (Cursor cursor = db.rawQuery("SELECT TipRaport FROM History_Raports LIMIT 10 OFFSET (SELECT COUNT(*) FROM History_Raports)-10;", null)) {
@@ -138,6 +145,14 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_DataSfarsit, datasfarsit);
         contentValues.put(COL_TipRaport, tipraport);
         db.update(TABLE_NAME, contentValues, "MONEDA= ?", new String[]{moneda});
+        return true;
+    }
+
+    public boolean updateDataBaseInventar(String denumire,Float cantitateNoua){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_Cantitate,cantitateNoua);
+        db.update(TABLE_NAME1,contentValues,"Denumire= "+denumire,new String[] {denumire});
         return true;
     }
 
@@ -187,4 +202,5 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
         return data;
     }
+
 }

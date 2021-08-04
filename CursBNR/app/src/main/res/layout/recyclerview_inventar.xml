@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="4"
-    android:background="@drawable/background_recyclerview">
+    android:background="@drawable/background_recyclerview"
+    android:id="@+id/linearlayout_inventar">
 
     <TextView
         android:id="@+id/denumire_produs"

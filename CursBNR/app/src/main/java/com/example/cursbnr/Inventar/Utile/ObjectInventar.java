@@ -1,10 +1,10 @@
 package com.example.cursbnr.Inventar.Utile;
 
 public class ObjectInventar {
+    Float cantitate;
+    String codbare;
     String denumire;
     Float pret;
-    String codbare;
-    Float cantitate;
 
     public ObjectInventar(String denumire, Float pret,String codbare, Float cantitate){
         this.denumire = denumire;
@@ -39,4 +39,6 @@ public class ObjectInventar {
         this.cantitate = cantitate;
     }
 
+    public void setEditTextValue(String toString) {
+    }
 }
