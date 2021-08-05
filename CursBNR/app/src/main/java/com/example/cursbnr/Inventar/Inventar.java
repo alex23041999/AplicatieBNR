@@ -3,7 +3,6 @@ package com.example.cursbnr.Inventar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
@@ -11,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,10 +18,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -39,7 +39,6 @@ import com.example.cursbnr.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -50,7 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Inventar extends Activity implements OnRecyclerViewRow {
+public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     private CompositeDisposable compositeDisposable;
     BroadcastReceiver broadcastReceiver;
     Button btn_scanare, btn_salvareCVS;
@@ -59,8 +58,9 @@ public class Inventar extends Activity implements OnRecyclerViewRow {
     RecyclerViewInventar_Adapter adapter;
     View inflatedView;
     DateBaseHelper dateBaseHelper1;
-    List<ObjectInventar> objectInventars;
+    ArrayList<ObjectInventar> objectInventars;
     RecyclerView.SmoothScroller smoothScroller;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class Inventar extends Activity implements OnRecyclerViewRow {
         doneKeyboardCodBare();
         doneKeyboardCantitate();
         editTextCodbare();
+        setMaxLenghtEditText(et_codBare);
     }
 
     private void initComponents() {
@@ -123,39 +124,54 @@ public class Inventar extends Activity implements OnRecyclerViewRow {
         et_codBare.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //adapter.filterList(s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                //filter(s.toString());
                 int i = 0;
-                for (ObjectInventar item : objectInventars) {
-                    if (item.getCodbare().equals(s.toString())) {
-                        i = objectInventars.indexOf(item);
+                if(s.toString().length() == 13){
+                    for (ObjectInventar item : objectInventars) {
+                        if (item.getCodbare().equals(s.toString())) {
+                           i = objectInventars.indexOf(item);
+                        }
                     }
+                    if(i == 0){
+                        Toast.makeText(Inventar.this, "Codul de bare introdus nu exista !", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(Inventar.this, "Codul de bare introdus apartine produsului nr: " + i, Toast.LENGTH_SHORT).show();
+                        smoothScroller.setTargetPosition(i);
+                       recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
+                        et_codBare.clearFocus();
+                        Intent intent = new Intent(Inventar.this, RecyclerViewInventar_Adapter.class);
+                        intent.putExtra("position", i);
+                        startActivity(intent);
+                    }
+                    try {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    et_codBare.getText().clear();
+                    adapter.notifyDataSetChanged();
                 }
-                smoothScroller.setTargetPosition(i);
-                recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
-                adapter.notifyDataSetChanged();
             }
         });
     }
 
-//    private void filter(String text) {
-//        ArrayList<ObjectInventar> objectInventars1 = new ArrayList<>();
-//        for (ObjectInventar item : objectInventars) {
-//            if (item.getCodbare().equals(text)) {
-//                objectInventars1.add(item);
-//            }
-//        }
-//        adapter.filterList(objectInventars1);
-//    }
+    private void setMaxLenghtEditText(EditText editText){
+        InputFilter[] editFilters = editText.getFilters();
+        InputFilter[] newFilters = new InputFilter[editFilters.length + 1];
+        System.arraycopy(editFilters, 0, newFilters, 0, editFilters.length);
+        newFilters[editFilters.length] = new InputFilter.LengthFilter(13);
+        editText.setFilters(newFilters);
+    }
 
     private void initRvElements(){
         compositeDisposable = new CompositeDisposable();
@@ -219,10 +235,10 @@ public class Inventar extends Activity implements OnRecyclerViewRow {
 
     private void initRV() {
         try {
-            recyclerView_inventar.setHasFixedSize(true);
-            recyclerView_inventar.setLayoutManager(new LinearLayoutManager(this));
             adapter = new RecyclerViewInventar_Adapter(objectInventars, this, this);
             recyclerView_inventar.setAdapter(adapter);
+            recyclerView_inventar.setHasFixedSize(true);
+            recyclerView_inventar.setLayoutManager(new LinearLayoutManager(this));
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL); // linie delimitare randuri
             dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_recyclerview));
             recyclerView_inventar.addItemDecoration(dividerItemDecoration);
@@ -289,6 +305,6 @@ public class Inventar extends Activity implements OnRecyclerViewRow {
     }
 
     @Override
-    public void onClick(int rowCount) {
+    public void onClick(int rowCount){
     }
 }

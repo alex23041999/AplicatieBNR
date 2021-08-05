@@ -2,7 +2,9 @@ package com.example.cursbnr.Inventar.Utile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,18 +25,25 @@ import com.example.cursbnr.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Intent.getIntent;
+import static android.content.Intent.getIntentOld;
+
 public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerViewInventar_Adapter.ViewHolder> {
 
     Context context;
-    private List<ObjectInventar> objectsInventar;
+    private ArrayList<ObjectInventar>  objectsInventar;
+    private ArrayList<ObjectInventar> copy;
     boolean modify = false;
     private final OnRecyclerViewRow onRecyclerViewRow;
     private DateBaseHelper dateBaseHelper;
 
-    public RecyclerViewInventar_Adapter(List<ObjectInventar> objectsInventar, Context context, OnRecyclerViewRow onRecyclerViewRow) {
+    public RecyclerViewInventar_Adapter(ArrayList<ObjectInventar> objectsInventar, Context context, OnRecyclerViewRow onRecyclerViewRow) {
         this.context = context;
         this.objectsInventar = objectsInventar;
         this.onRecyclerViewRow = onRecyclerViewRow;
+        this.copy = new ArrayList<>();
+        copy.addAll(objectsInventar);
+
     }
 
     @Override
@@ -53,7 +62,6 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
         holder.tvcodbare.setText(list_cod);
         Float list_cant = objectsInventar.get(position).getCantitate();
         holder.etcantitate.setText(list_cant.toString());
-
     }
 
     @Override
@@ -92,33 +100,6 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
                     return false;
                 }
             });
-
-//            etcantitate.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    modify = true;
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                    if (modify) {
-//                        modify = false;
-//                        try {
-//                            objectsInventar.get(getAdapterPosition()).setCantitate(Float.valueOf((etcantitate.getText().toString())));
-//                            notifyDataSetChanged();
-//                            dateBaseHelper.updateDataBaseInventar(objectsInventar.get(getAdapterPosition()).getDenumire(),Float.valueOf(etcantitate.getText().toString()));
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            });
-
             this.onRecyclerViewRow = onRecyclerViewRow;
             itemView.setOnClickListener(this);
         }
@@ -143,8 +124,20 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
             });
         }
     }
-    public void filterList(ArrayList<ObjectInventar> filteredList) {
-        objectsInventar = filteredList;
-        notifyDataSetChanged();
-    }
+//    public void filterList(CharSequence charSequence) {
+//        ArrayList<ObjectInventar> objectInventars1 = new ArrayList<>();
+//        if(!TextUtils.isEmpty(charSequence)){
+//            for (ObjectInventar item : objectsInventar) {
+//                if (item.getCodbare().contains(charSequence)) {
+//                    objectInventars1.add(item);
+//                }
+//            }
+//        }else{
+//            objectInventars1.addAll(copy);
+//        }
+//        objectsInventar.clear();
+//        objectsInventar.addAll(objectInventars1);
+//        notifyDataSetChanged();
+//        objectInventars1.clear();
+//    }
 }
