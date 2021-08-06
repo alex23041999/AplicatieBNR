@@ -6,12 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.widget.Toast;
 
+import com.example.cursbnr.Inventar.Inventar;
 import com.example.cursbnr.Inventar.Utile.ObjectInventar;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
@@ -63,6 +68,12 @@ public class DateBaseHelper extends SQLiteOpenHelper {
             return false;
         else
             return true;
+    }
+
+    public void exportToCSV(File file, FileWriter writer){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Inventar",null);
+
     }
 
     public boolean insertValuesInventar(ObjectInventar objectInventar) {

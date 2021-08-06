@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -30,15 +31,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
 import com.example.cursbnr.Inventar.Listener.OnRecyclerViewRow;
+import com.example.cursbnr.Inventar.Utile.BarcodeScan;
 import com.example.cursbnr.Inventar.Utile.FakeApiResponse;
 import com.example.cursbnr.Inventar.Utile.JsonFakeApi;
 import com.example.cursbnr.Inventar.Utile.ObjectInventar;
 import com.example.cursbnr.Inventar.Utile.RecyclerViewInventar_Adapter;
 import com.example.cursbnr.Inventar.retrofit.ApiServiceGenerator;
 import com.example.cursbnr.R;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.opencsv.CSVWriter;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -52,7 +62,7 @@ import retrofit2.Response;
 public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     private CompositeDisposable compositeDisposable;
     BroadcastReceiver broadcastReceiver;
-    Button btn_scanare, btn_salvareCVS;
+    Button btn_scanare, btn_salvareCSV;
     EditText et_codBare, et_cantitate;
     RecyclerView recyclerView_inventar;
     RecyclerViewInventar_Adapter adapter;
@@ -60,7 +70,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     DateBaseHelper dateBaseHelper1;
     ArrayList<ObjectInventar> objectInventars;
     RecyclerView.SmoothScroller smoothScroller;
-
+    private static final String File_name = "proiectPracticaCSV.csv";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,19 +96,82 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         doneKeyboardCantitate();
         editTextCodbare();
         setMaxLenghtEditText(et_codBare);
+        btnScanareOnClick();
+        btnSalvareCSVonClick();
     }
 
     private void initComponents() {
         broadcastReceiver = new CheckingConnection();
         btn_scanare = findViewById(R.id.btn_scanare);
-        btn_salvareCVS = findViewById(R.id.btn_salvare);
+        btn_salvareCSV = findViewById(R.id.btn_salvare);
         recyclerView_inventar = findViewById(R.id.recycler_inventar);
         et_codBare = findViewById(R.id.et_codbare);
         inflatedView = getLayoutInflater().inflate(R.layout.recyclerview_inventar, null);
         et_cantitate = inflatedView.findViewById(R.id.cantitate_produs);
     }
 
-   // protected void onStart() {
+    private void btnSalvareCSVonClick(){
+        btn_salvareCSV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String filePath = Environment.getExternalStorageDirectory().toString()+ File_name;
+                    File file = new File(Environment.getExternalStorageDirectory(),File_name);
+                    CSVWriter csvWriter;
+                    if(!file.exists())
+                    {
+                        FileWriter mFileWriter = new FileWriter(filePath, true);
+                        csvWriter = new CSVWriter(mFileWriter);
+                    }
+                    else
+                    {
+                        csvWriter = new CSVWriter(new FileWriter(filePath));
+                    }
+                    String[] data = {"Ship Name", "Scientist Name", "...", };
+                    csvWriter.writeNext(data);
+                    csvWriter.close();
+                    Toast.makeText(Inventar.this, "locatie: "+filePath, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void btnScanareOnClick(){
+        btn_scanare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(Inventar.this);
+                intentIntegrator.setCaptureActivity(BarcodeScan.class);
+                intentIntegrator.setPrompt("Scan the codebare");
+                intentIntegrator.setOrientationLocked(true);
+                intentIntegrator.initiateScan();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        if(intentResult!=null){
+            if(intentResult.getContents() == null){
+                Toast.makeText(this, "Eroare", Toast.LENGTH_SHORT).show();
+            }else if (intentResult.getContents().length() == 12){
+                et_codBare.setText(intentResult.getContents());
+                et_codBare.clearFocus();
+            }else{
+                et_codBare.getText().clear();
+                et_codBare.clearFocus();
+                Toast.makeText(this, "Codul de bare nu exista !", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            super.onActivityResult(requestCode,resultCode,data);
+        }
+    }
+
+//     protected void onStart() {
 //        super.onStart();
 //        compositeDisposable = new CompositeDisposable();
 //        ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
@@ -118,7 +191,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 //                            progressDialog.hide();
 //                        }
 //                ));
-    //}
+//    }
 
     private void editTextCodbare(){
         et_codBare.addTextChangedListener(new TextWatcher() {
@@ -134,7 +207,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
             @Override
             public void afterTextChanged(Editable s) {
                 int i = 0;
-                if(s.toString().length() == 13){
+                if(s.toString().length() == 12){
                     for (ObjectInventar item : objectInventars) {
                         if (item.getCodbare().equals(s.toString())) {
                            i = objectInventars.indexOf(item);
@@ -142,14 +215,12 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                     }
                     if(i == 0){
                         Toast.makeText(Inventar.this, "Codul de bare introdus nu exista !", Toast.LENGTH_SHORT).show();
+                        et_codBare.getText().clear();
                     }else{
-                        Toast.makeText(Inventar.this, "Codul de bare introdus apartine produsului nr: " + i, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Inventar.this, "Codul de bare introdus apartine produsului: " + objectInventars.get(i).getDenumire().toUpperCase(), Toast.LENGTH_LONG).show();
                         smoothScroller.setTargetPosition(i);
                        recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
                         et_codBare.clearFocus();
-                        Intent intent = new Intent(Inventar.this, RecyclerViewInventar_Adapter.class);
-                        intent.putExtra("position", i);
-                        startActivity(intent);
                     }
                     try {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -158,7 +229,6 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    et_codBare.getText().clear();
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -169,7 +239,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         InputFilter[] editFilters = editText.getFilters();
         InputFilter[] newFilters = new InputFilter[editFilters.length + 1];
         System.arraycopy(editFilters, 0, newFilters, 0, editFilters.length);
-        newFilters[editFilters.length] = new InputFilter.LengthFilter(13);
+        newFilters[editFilters.length] = new InputFilter.LengthFilter(12);
         editText.setFilters(newFilters);
     }
 
@@ -193,6 +263,8 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                                 for(int i=0;i<dateBaseHelper1.getObjects().size();i++){
                                     objectInventars.add(i,dateBaseHelper1.getObjects().get(i));
                                 }
+                            }else{
+                                Toast.makeText(this, "Baza de date este goala !", Toast.LENGTH_SHORT).show();
                             }
                             adapter.notifyDataSetChanged();
                             progressDialog.hide();
@@ -210,16 +282,17 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                     Toast.makeText(Inventar.this, "" + response.code(), Toast.LENGTH_SHORT).show();
                 }else{
                     try {
-//                        for(int i=0; i < response.body().produse.size(); i++){
-//                            dateBaseHelper1.insertValuesInventar(response.body().produse.get(i));
-//                        }
-//                        dateBaseHelper1.DeleteDatasInventar();
-//                        if(!dateBaseHelper1.isEmpty()){
-//                            for(int i=0;i<dateBaseHelper1.getObjects().size();i++){
-//                                objectInventars.add(i,dateBaseHelper1.getObjects().get(i));
-//                            }
-//                        }
-//                        adapter.notifyDataSetChanged();
+                        for(int i=0; i < response.body().produse.size(); i++){
+                            dateBaseHelper1.insertValuesInventar(response.body().produse.get(i));
+                        }
+                        dateBaseHelper1.DeleteDatasInventar();
+                        objectInventars.clear();
+                        if(!dateBaseHelper1.isEmpty()){
+                            for(int i=0;i<dateBaseHelper1.getObjects().size();i++){
+                                objectInventars.add(i,dateBaseHelper1.getObjects().get(i));
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
