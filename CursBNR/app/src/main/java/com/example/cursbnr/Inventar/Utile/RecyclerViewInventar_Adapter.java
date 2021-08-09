@@ -33,7 +33,6 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
     Context context;
     private ArrayList<ObjectInventar>  objectsInventar;
     private ArrayList<ObjectInventar> copy;
-    boolean modify = false;
     private final OnRecyclerViewRow onRecyclerViewRow;
     private DateBaseHelper dateBaseHelper;
 

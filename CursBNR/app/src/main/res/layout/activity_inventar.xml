@@ -51,22 +51,23 @@
         android:layout_weight="0.4"
         android:weightSum="1">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:text="Salveaza produsele in fisier CSV"
-            android:gravity="center"
-            android:textColor="@android:color/black"/>
-
         <Button
             android:id="@+id/btn_salvare"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="Salvare in CSV"
+            android:text="Salvare CSV"
             android:background="@drawable/gradient_ripple"
             android:textColor="@android:color/black"/>
+        <Button
+            android:id="@+id/btn_trimitere"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Trimitere CSV"
+            android:background="@drawable/gradient_ripple"
+            android:textColor="@android:color/black"/>
+
 
     </LinearLayout>
 

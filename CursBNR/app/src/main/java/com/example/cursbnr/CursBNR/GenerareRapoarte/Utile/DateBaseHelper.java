@@ -70,12 +70,6 @@ public class DateBaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public void exportToCSV(File file, FileWriter writer){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Inventar",null);
-
-    }
-
     public boolean insertValuesInventar(ObjectInventar objectInventar) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -102,13 +96,13 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         return empty;
     }
 
-    public ArrayList<ObjectInventar> getObjects(){
+    public ArrayList<ObjectInventar> getObjects() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<ObjectInventar> objectInventars = new ArrayList<>();
-        int i=0;
-        try(Cursor cursor = db.rawQuery("SELECT * FROM Inventar LIMIT 15 OFFSET(SELECT COUNT (*) FROM Inventar)-15;",null)){
-            while (cursor.moveToNext()){
-                objectInventars.add(i, new ObjectInventar(cursor.getString(1),cursor.getFloat(2),cursor.getString(3),cursor.getFloat(4)));
+        int i = 0;
+        try (Cursor cursor = db.rawQuery("SELECT * FROM Inventar LIMIT 15 OFFSET(SELECT COUNT (*) FROM Inventar)-15;", null)) {
+            while (cursor.moveToNext()) {
+                objectInventars.add(i, new ObjectInventar(cursor.getString(1), cursor.getFloat(2), cursor.getString(3), cursor.getFloat(4)));
                 i++;
             }
         }
@@ -188,8 +182,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_Cantitate, cantitateNoua);
-        db.update(TABLE_NAME1, contentValues, "Denumire ='" + denumire +"'",null);
-//        db.execSQL("UPDATE Inventar SET Cantitate='cantitateNoua' WHERE Denumire='denumire'");
+        db.update(TABLE_NAME1, contentValues, "Denumire ='" + denumire + "'", null);
         return true;
     }
 

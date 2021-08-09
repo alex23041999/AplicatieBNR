@@ -3,10 +3,12 @@ package com.example.cursbnr.Inventar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -62,7 +65,7 @@ import retrofit2.Response;
 public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     private CompositeDisposable compositeDisposable;
     BroadcastReceiver broadcastReceiver;
-    Button btn_scanare, btn_salvareCSV;
+    Button btn_scanare, btn_salvareCSV,btn_trimitereCSV;
     EditText et_codBare, et_cantitate;
     RecyclerView recyclerView_inventar;
     RecyclerViewInventar_Adapter adapter;
@@ -71,6 +74,8 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     ArrayList<ObjectInventar> objectInventars;
     RecyclerView.SmoothScroller smoothScroller;
     private static final String File_name = "proiectPracticaCSV.csv";
+    FileWriter mFileWriter;
+    private File f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +103,14 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         setMaxLenghtEditText(et_codBare);
         btnScanareOnClick();
         btnSalvareCSVonClick();
+        btnTrimitereOnClick();
     }
 
     private void initComponents() {
         broadcastReceiver = new CheckingConnection();
         btn_scanare = findViewById(R.id.btn_scanare);
         btn_salvareCSV = findViewById(R.id.btn_salvare);
+        btn_trimitereCSV = findViewById(R.id.btn_trimitere);
         recyclerView_inventar = findViewById(R.id.recycler_inventar);
         et_codBare = findViewById(R.id.et_codbare);
         inflatedView = getLayoutInflater().inflate(R.layout.recyclerview_inventar, null);
@@ -115,24 +122,55 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
             @Override
             public void onClick(View v) {
                 try {
-                    String filePath = Environment.getExternalStorageDirectory().toString()+ File_name;
-                    File file = new File(Environment.getExternalStorageDirectory(),File_name);
-                    CSVWriter csvWriter;
-                    if(!file.exists())
-                    {
-                        FileWriter mFileWriter = new FileWriter(filePath, true);
-                        csvWriter = new CSVWriter(mFileWriter);
+                    String baseDir = android.os.Environment.getExternalStoragePublicDirectory("ProiectPractica").getAbsolutePath();
+                    String filePath = baseDir + File.separator + File_name;
+                    f = new File(filePath);
+                    CSVWriter writer;
+
+                    if (f.exists() && !f.isDirectory()) {
+                        mFileWriter = new FileWriter(filePath, false);
+                        writer = new CSVWriter(mFileWriter);
+                    } else {
+                        writer = new CSVWriter(new FileWriter(filePath));
                     }
-                    else
-                    {
-                        csvWriter = new CSVWriter(new FileWriter(filePath));
+                    String[] s = {"Denumire", "Pret", "Cod de bare", "Cantitate"};
+                    writer.writeNext(s);
+                    for (ObjectInventar object : objectInventars) {
+                        String[] item = {object.getDenumire(), object.getPret().toString(), object.getCodbare(), object.getCantitate().toString()};
+                        writer.writeNext(item);
                     }
-                    String[] data = {"Ship Name", "Scientist Name", "...", };
-                    csvWriter.writeNext(data);
-                    csvWriter.close();
-                    Toast.makeText(Inventar.this, "locatie: "+filePath, Toast.LENGTH_SHORT).show();
+                    writer.close();
+                    if(f.length() > 0){
+                        Toast.makeText(Inventar.this, "Salvarea datelor in CSV a avut succes", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(Inventar.this, "Datele nu au putut fi salvate in CSV", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void btnTrimitereOnClick(){
+        btn_trimitereCSV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(f.exists() && f.length() > 0){
+                    try {
+                        Context context = getApplicationContext();
+                        Uri path= FileProvider.getUriForFile(context,"com.example.cursbnr.fileprovider",f);
+                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                        sendIntent.setType("text/csv");
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT,"Produse inventar");
+                        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        sendIntent.putExtra(Intent.EXTRA_STREAM,path);
+                        startActivity(Intent.createChooser(sendIntent, "Send E-mail"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(Inventar.this, "Nu exista niciun fisier CSV salvat.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
