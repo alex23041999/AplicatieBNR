@@ -1,11 +1,6 @@
 package com.example.cursbnr.Inventar.Utile;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,20 +13,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
-import com.example.cursbnr.Inventar.Inventar;
 import com.example.cursbnr.Inventar.Listener.OnRecyclerViewRow;
 import com.example.cursbnr.R;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static android.content.Intent.getIntent;
-import static android.content.Intent.getIntentOld;
 
 public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerViewInventar_Adapter.ViewHolder> {
 
     Context context;
-    private ArrayList<ObjectInventar>  objectsInventar;
+    private ArrayList<ObjectInventar> objectsInventar;
     private ArrayList<ObjectInventar> copy;
     private final OnRecyclerViewRow onRecyclerViewRow;
     private DateBaseHelper dateBaseHelper;
@@ -79,22 +69,21 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
             tvpret = itemView.findViewById(R.id.pret_produs);
             tvcodbare = itemView.findViewById(R.id.codbare_produs);
             etcantitate = itemView.findViewById(R.id.cantitate_produs);
-           etcantitate.addTextChangedListener(new DecimalInputTextWatcher(etcantitate, 2));
-
+            etcantitate.addTextChangedListener(new DecimalInputTextWatcher(etcantitate, 2));
             etcantitate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if(event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
-                            || actionId == EditorInfo.IME_ACTION_DONE){
-                            try {
-                                ObjectInventar obj = objectsInventar.get(getAbsoluteAdapterPosition());
-                                obj.setCantitate(Float.valueOf((etcantitate.getText().toString())));
-                                new DateBaseHelper(context).updateDataBaseInventar(obj.getDenumire(), obj.getCantitate());
-                                notifyDataSetChanged();
-                                etcantitate.clearFocus();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                    if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                            || actionId == EditorInfo.IME_ACTION_DONE) {
+                        try {
+                            ObjectInventar obj = objectsInventar.get(getAbsoluteAdapterPosition());
+                            obj.setCantitate(Float.valueOf((etcantitate.getText().toString())));
+                            new DateBaseHelper(context).updateDataBaseInventar(obj.getDenumire(), obj.getCantitate());
+                            notifyDataSetChanged();
+                            etcantitate.clearFocus();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     return false;
                 }

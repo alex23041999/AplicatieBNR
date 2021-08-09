@@ -216,21 +216,4 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> getCurrencyForSpinner(String querry) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<String> data = new ArrayList<>();
-        Cursor res = db.rawQuery(querry, null);
-        try {
-            if (res.moveToFirst()) {
-                do {
-                    data.add(res.getString(0));
-                } while (res.moveToNext());
-            }
-            res.close();
-        } catch (Exception e) {
-            String v = e.toString();
-        }
-        return data;
-    }
-
 }
