@@ -67,7 +67,7 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
         recyclerView_Istoric = findViewById(R.id.recycler_istoricrapoarte);
     }
 
-    private void SetMonede() {
+    public void SetMonede() {
         int i = 0;
         while (i < dateBaseHelper.GetMonede().size()) {
             moneda.add(dateBaseHelper.GetMonede().get(i));
@@ -75,7 +75,7 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
         }
     }
 
-    private void SetDateStart() {
+    public void SetDateStart() {
         int i = 0;
         while (i < dateBaseHelper.GetMonede().size()) {
             datastart.add(dateBaseHelper.GetDataStart().get(i));
@@ -83,7 +83,7 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
         }
     }
 
-    private void SetDateFinal() {
+    public void SetDateFinal() {
         int i = 0;
         while (i < dateBaseHelper.GetMonede().size()) {
             datafinal.add(dateBaseHelper.GetDataSfarsit().get(i));
@@ -91,7 +91,7 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
         }
     }
 
-    private void SetTipuri() {
+    public void SetTipuri() {
         int i = 0;
         while (i < dateBaseHelper.GetMonede().size()) {
             tip_raport.add(dateBaseHelper.GetTip().get(i));

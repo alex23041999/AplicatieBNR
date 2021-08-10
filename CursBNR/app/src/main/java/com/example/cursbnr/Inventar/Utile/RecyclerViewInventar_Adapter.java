@@ -1,6 +1,7 @@
 package com.example.cursbnr.Inventar.Utile;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
+import com.example.cursbnr.Inventar.Inventar;
 import com.example.cursbnr.Inventar.Listener.OnRecyclerViewRow;
 import com.example.cursbnr.R;
 
@@ -51,6 +54,14 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
         holder.tvcodbare.setText(list_cod);
         Float list_cant = objectsInventar.get(position).getCantitate();
         holder.etcantitate.setText(list_cant.toString());
+
+        for(int i = 0; i<objectsInventar.size(); i++){
+            if(Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(position).getCodbare())){
+                holder.itemView.setBackgroundResource(R.drawable.background_selecteditem);
+            }else {
+                holder.itemView.setBackgroundResource(R.drawable.background_recyclerview);
+            }
+        }
     }
 
     @Override

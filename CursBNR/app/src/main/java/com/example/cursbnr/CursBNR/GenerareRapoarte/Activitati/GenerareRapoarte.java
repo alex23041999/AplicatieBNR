@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,8 @@ import com.example.cursbnr.CursBNR.CursValutar.Utile.UrlParser;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.MonedaValoare;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.RecyclerView_TipLista_Adapter;
+import com.example.cursbnr.CursBNR.HomeScreen;
+import com.example.cursbnr.CursBNR.IstoricRapoarte.Activitati.IstoricRapoarte;
 import com.example.cursbnr.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -100,6 +103,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     boolean typeLista = false;
     boolean typeExist = false;
     int i = 0;
+    IstoricRapoarte istoricRapoarte;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -529,6 +533,25 @@ public class GenerareRapoarte extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+//        dateBaseHelper.DeleteDatas();
+//        dateBaseHelper.GetMonede();
+//        dateBaseHelper.GetDataStart();
+//        dateBaseHelper.GetDataSfarsit();
+//        dateBaseHelper.GetTip();
+//        istoricRapoarte.SetMonede();
+//        istoricRapoarte.SetDateStart();
+//        istoricRapoarte.SetDateFinal();
+//        istoricRapoarte.SetTipuri();
+        Intent intent = new Intent(GenerareRapoarte.this, HomeScreen.class);
+        startActivity(intent);
+        adapter.notifyDataSetChanged();
+        super.onBackPressed();
+        finish();
     }
 
     public String GetContentFromUrl() throws IOException {

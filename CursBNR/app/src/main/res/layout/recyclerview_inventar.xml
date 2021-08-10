@@ -37,6 +37,7 @@
         android:layout_weight="1"
         android:imeOptions="actionDone"
         android:singleLine="true"
+        android:maxLength="9"
         android:inputType="numberDecimal"/>
 
 </LinearLayout>

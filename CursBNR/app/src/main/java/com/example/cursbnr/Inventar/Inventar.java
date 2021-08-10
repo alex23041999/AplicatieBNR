@@ -193,6 +193,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                 Toast.makeText(this, "Eroare", Toast.LENGTH_SHORT).show();
             } else if (intentResult.getContents().length() == 12) {
                 et_codBare.setText(intentResult.getContents());
+
                 et_codBare.clearFocus();
             } else {
                 et_codBare.getText().clear();
@@ -226,6 +227,8 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 //                ));
 //    }
 
+    public static String codbareTAG;
+
     private void editTextCodbare() {
         et_codBare.addTextChangedListener(new TextWatcher() {
             @Override
@@ -244,12 +247,14 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                     for (ObjectInventar item : objectInventars) {
                         if (item.getCodbare().equals(s.toString())) {
                             i = objectInventars.indexOf(item);
+                            objectInventars.get(i).setCantitate(objectInventars.get(i).getCantitate() + 1);
                         }
                     }
                     if (i == -1) {
                         Toast.makeText(Inventar.this, "Codul de bare introdus nu exista !", Toast.LENGTH_SHORT).show();
                         et_codBare.getText().clear();
                     } else {
+                        codbareTAG = objectInventars.get(i).getCodbare();
                         Toast.makeText(Inventar.this, "Codul de bare introdus apartine produsului: " + objectInventars.get(i).getDenumire().toUpperCase(), Toast.LENGTH_LONG).show();
                         smoothScroller.setTargetPosition(i);
                         recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
@@ -412,5 +417,11 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 
     @Override
     public void onClick(int rowCount) {
+        if(objectInventars.get(rowCount).getCodbare() != null){
+            et_codBare.setText(objectInventars.get(rowCount).getCodbare());
+        }else{
+            et_codBare.getText().clear();
+        }
+
     }
 }
