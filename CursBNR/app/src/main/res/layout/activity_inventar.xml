@@ -20,7 +20,7 @@
             android:id="@+id/et_codbare"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:hint="Cod de bare"
             android:textColor="@android:color/black"
             android:gravity="center"
@@ -28,13 +28,13 @@
             android:singleLine="true"
             android:inputType="number"/>
         <Button
+            android:layout_marginRight="20dp"
             android:id="@+id/btn_scanare"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Scanare"
-            android:layout_weight="0.5"
-            android:background="@drawable/gradient_ripple"
-            android:textColor="@android:color/black"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            android:textColor="@android:color/black"
+            android:background="@drawable/scan_button"/>
 
     </LinearLayout>
 

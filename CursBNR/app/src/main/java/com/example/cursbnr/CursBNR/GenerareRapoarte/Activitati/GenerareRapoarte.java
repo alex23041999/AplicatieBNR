@@ -524,34 +524,16 @@ public class GenerareRapoarte extends AppCompatActivity {
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-                } else if (typeExist == true && typeLista == false && typeGrafic == false) {
-                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
+//                else if (typeExist == true && typeLista == false && typeGrafic == false) {
+//                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
                 } else if (typeLista == false && typeGrafic == false) {
                     Toast.makeText(GenerareRapoarte.this, "Selectati o varianta de salvare a raportului !", Toast.LENGTH_SHORT).show();
-                } else if (typeExist == true && typeLista == false && typeGrafic == false) {
-                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
                 }
+//                else if (typeExist == true && typeLista == false && typeGrafic == false) {
+//                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-//        dateBaseHelper.DeleteDatas();
-//        dateBaseHelper.GetMonede();
-//        dateBaseHelper.GetDataStart();
-//        dateBaseHelper.GetDataSfarsit();
-//        dateBaseHelper.GetTip();
-//        istoricRapoarte.SetMonede();
-//        istoricRapoarte.SetDateStart();
-//        istoricRapoarte.SetDateFinal();
-//        istoricRapoarte.SetTipuri();
-        Intent intent = new Intent(GenerareRapoarte.this, HomeScreen.class);
-        startActivity(intent);
-        adapter.notifyDataSetChanged();
-        super.onBackPressed();
-        finish();
     }
 
     public String GetContentFromUrl() throws IOException {

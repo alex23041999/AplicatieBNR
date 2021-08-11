@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundstyle"
+    android:background="@drawable/background_generarerapoarte"
     android:orientation="vertical"
     android:weightSum="1"
     tools:context=".CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte">
@@ -31,7 +31,7 @@
                 android:drawableLeft="@drawable/ic_baseline_attach_money_24"
                 android:gravity="left|center"
                 android:text="Monedă"
-                android:textColor="#301473"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -64,8 +64,8 @@
                     android:layout_weight="0.5"
                     android:gravity="center|bottom"
                     android:text="Dată început"
-                    android:textColor="#301473"
-                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <EditText
@@ -77,8 +77,8 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:hint="Data început..."
-                    android:textColor="#00e0e1"
-                    android:textColorHint="#00e0e1" />
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
 
             </LinearLayout>
 
@@ -96,8 +96,8 @@
                     android:layout_weight="0.5"
                     android:gravity="center|bottom"
                     android:text="Dată sfârșit"
-                    android:textColor="#301473"
-                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <EditText
@@ -109,8 +109,8 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:hint="Data sfârșit..."
-                    android:textColor="#00e0e1"
-                    android:textColorHint="#00e0e1" />
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
             </LinearLayout>
         </LinearLayout>
 
@@ -130,7 +130,7 @@
                 android:drawableLeft="@drawable/tip_raport"
                 android:gravity="left|center"
                 android:text="Tip raport:"
-                android:textColor="#301473"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold"/>
 

@@ -244,28 +244,29 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
             public void afterTextChanged(Editable s) {
                 int i = -1;
                 if (s.toString().length() == 12) {
+                    et_codBare.clearFocus();
+//                    try {
+//                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
                     for (ObjectInventar item : objectInventars) {
                         if (item.getCodbare().equals(s.toString())) {
                             i = objectInventars.indexOf(item);
                             objectInventars.get(i).setCantitate(objectInventars.get(i).getCantitate() + 1);
+                            codbareTAG = objectInventars.get(i).getCodbare();
+                            //Toast.makeText(Inventar.this, "Codul de bare introdus apartine produsului: " + objectInventars.get(i).getDenumire().toUpperCase(), Toast.LENGTH_LONG).show();
+                            smoothScroller.setTargetPosition(i);
+                            recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
                         }
                     }
                     if (i == -1) {
                         Toast.makeText(Inventar.this, "Codul de bare introdus nu exista !", Toast.LENGTH_SHORT).show();
                         et_codBare.getText().clear();
-                    } else {
-                        codbareTAG = objectInventars.get(i).getCodbare();
-                        Toast.makeText(Inventar.this, "Codul de bare introdus apartine produsului: " + objectInventars.get(i).getDenumire().toUpperCase(), Toast.LENGTH_LONG).show();
-                        smoothScroller.setTargetPosition(i);
-                        recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
+                        //et_codBare.requestFocus();
                         et_codBare.clearFocus();
-                    }
-                    try {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -366,8 +367,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                     try {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
-                        et_cantitate.getText().clear();
+                        et_cantitate.clearFocus();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -383,9 +383,17 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     try {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
+                        if(et_codBare.getText().toString().length() != 12){
+                            Toast.makeText(Inventar.this, "Cod de bare invalid", Toast.LENGTH_SHORT).show();
+                            et_codBare.getText().clear();
+                            et_codBare.clearFocus();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        }else if(et_codBare.getText().toString().length() == 12){
+                            et_codBare.clearFocus();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -419,9 +427,11 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     public void onClick(int rowCount) {
         if(objectInventars.get(rowCount).getCodbare() != null){
             et_codBare.setText(objectInventars.get(rowCount).getCodbare());
+            //et_codBare.clearFocus();
         }else{
             et_codBare.getText().clear();
+           // et_codBare.clearFocus();
         }
-
     }
+
 }

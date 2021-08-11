@@ -1,5 +1,6 @@
 package com.example.cursbnr.Inventar.Utile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.KeyEvent;
@@ -58,6 +59,22 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
         for(int i = 0; i<objectsInventar.size(); i++){
             if(Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(position).getCodbare())){
                 holder.itemView.setBackgroundResource(R.drawable.background_selecteditem);
+//                holder.etcantitate.requestFocus();
+//                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+//                imm.showSoftInput(holder.etcantitate, InputMethodManager.SHOW_IMPLICIT);
+//                holder.etcantitate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                    @Override
+//                    public void onFocusChange(View v, boolean hasFocus) {
+//                        // If it loses focus...
+//                        if (!hasFocus) {
+//                            // Hide soft keyboard.
+//                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+//                            imm.hideSoftInputFromWindow(holder.etcantitate.getWindowToken(), 0);
+//                            // Make it non-editable again.
+//                            holder.etcantitate.setKeyListener(null);
+//                        }
+//                    }
+//                });
             }else {
                 holder.itemView.setBackgroundResource(R.drawable.background_recyclerview);
             }
@@ -106,8 +123,8 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
         public void onClick(View v) {
             onRecyclerViewRow.onClick(getAbsoluteAdapterPosition());
             etcantitate.requestFocus();
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(etcantitate, InputMethodManager.SHOW_IMPLICIT);
+//            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+//            imm.showSoftInput(etcantitate, InputMethodManager.SHOW_IMPLICIT);
             etcantitate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -122,7 +139,7 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
                 }
             });
         }
-    }
+        }
 //    public void filterList(CharSequence charSequence) {
 //        ArrayList<ObjectInventar> objectInventars1 = new ArrayList<>();
 //        if(!TextUtils.isEmpty(charSequence)){
@@ -140,3 +157,4 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
 //        objectInventars1.clear();
 //    }
 }
+

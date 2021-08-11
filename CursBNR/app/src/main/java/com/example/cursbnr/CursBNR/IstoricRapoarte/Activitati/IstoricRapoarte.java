@@ -129,4 +129,5 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
 
         startActivity(intent);
     }
+
 }
