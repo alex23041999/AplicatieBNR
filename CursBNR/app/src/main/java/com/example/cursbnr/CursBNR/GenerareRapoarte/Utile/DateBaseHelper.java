@@ -6,31 +6,28 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.widget.Toast;
 
-import com.example.cursbnr.Inventar.Inventar;
 import com.example.cursbnr.Inventar.Utile.ObjectInventar;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 
-//dupa fiecare modificare a elementelor bazei de date(coloane, nume tabel..), reinstalez aplicatia pe telefon
+//clasa ce defineste DataBase-ul folosit pentru aplicatie
 public class DateBaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "CursBNRRapoarte.db";
 
+    //primul tabel este destinat istoricului de rapoarte
     public static final String TABLE_NAME = "History_Raports";
     public static final String COL_Moneda = "Moneda";
     public static final String COL_DataStart = "DataStart";
     public static final String COL_DataSfarsit = "DataSfarsit";
     public static final String COL_TipRaport = "TipRaport";
 
+    //al doilea tabel este destinat produselor din inventar
     public static final String TABLE_NAME1 = "Inventar";
     public static final String COL_ID = "Id";
     public static final String COL_Denumire = "Denumire";
@@ -109,7 +106,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         return objectInventars;
     }
 
-    public ArrayList<String> GetMonede() {
+    public ArrayList<String> getMonede() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> mon = new ArrayList<>();
         try (Cursor cursor = db.rawQuery("SELECT Moneda FROM History_Raports LIMIT 10 OFFSET (SELECT COUNT(*) FROM History_Raports)-10;", null)) {
@@ -120,7 +117,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> GetDataStart() {
+    public ArrayList<String> getDataStart() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> mon = new ArrayList<>();
         try (Cursor cursor = db.rawQuery("SELECT DataStart FROM History_Raports LIMIT 10 OFFSET (SELECT COUNT(*) FROM History_Raports)-10;", null)) {
@@ -131,7 +128,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> GetDataSfarsit() {
+    public ArrayList<String> getDataSfarsit() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> mon = new ArrayList<>();
         try (Cursor cursor = db.rawQuery("SELECT DataSfarsit FROM History_Raports LIMIT 10 OFFSET (SELECT COUNT(*) FROM History_Raports)-10;", null)) {
@@ -142,7 +139,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> GetTip() {
+    public ArrayList<String> getTip() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> mon = new ArrayList<>();
         try (Cursor cursor = db.rawQuery("SELECT TipRaport FROM History_Raports LIMIT 10 OFFSET (SELECT COUNT(*) FROM History_Raports)-10;", null)) {
@@ -153,7 +150,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void DeleteDatas() {
+    public void deleteDatas() {
         SQLiteDatabase db = this.getWritableDatabase();
         String delete = "DELETE FROM History_Raports WHERE ROWID IN (SELECT ROWID FROM History_Raports ORDER BY ROWID DESC LIMIT -1 OFFSET 10)";
         db.execSQL(delete);
@@ -161,7 +158,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         db.execSQL(del);
     }
 
-    public void DeleteDatasInventar() {
+    public void deleteDatasInventar() {
         SQLiteDatabase db = this.getWritableDatabase();
         String del = "DELETE FROM Inventar WHERE ROWID IN (SELECT ROWID FROM Inventar ORDER BY ROWID DESC LIMIT -1 OFFSET 15)";
         db.execSQL(del);
@@ -194,6 +191,7 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         db.execSQL(clear);
     }
 
+    // functie prin care se realizeaza o copie a bazei in telefon
     public static void copyDbToExternal() {
         try {
             File sd = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);

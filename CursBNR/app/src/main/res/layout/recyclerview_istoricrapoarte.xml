@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="4"
-    android:background="@drawable/background_recyclerview"
+    android:background="@drawable/background_recycleristoric"
     android:padding="5dp">
 
     <TextView
@@ -16,8 +16,8 @@
         android:textSize="17sp"
         android:layout_margin="5dp"
         android:hint="Moneda"
-        android:gravity="center"
-        android:textColor="#00e0e1"/>
+        android:gravity="center|top"
+        android:textColor="#FFFFFF"/>
     <TextView
         android:id="@+id/tv_datainceput"
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:layout_margin="5dp"
         android:hint="Data start"
         android:gravity="center"
-        android:textColor="#00e0e1"/>
+        android:textColor="#FFFFFF"/>
     <TextView
         android:id="@+id/tv_datasfarsit"
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
         android:layout_margin="5dp"
         android:hint="Data sfarsit"
         android:gravity="center"
-        android:textColor="#00e0e1"/>
+        android:textColor="#FFFFFF"/>
     <TextView
         android:id="@+id/tv_tipraport"
         android:layout_width="match_parent"
@@ -50,6 +50,6 @@
         android:layout_margin="5dp"
         android:hint="Tip raport"
         android:gravity="center"
-        android:textColor="#00e0e1"/>
+        android:textColor="#FFFFFF"/>
 
 </LinearLayout>

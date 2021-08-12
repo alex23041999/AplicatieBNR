@@ -10,13 +10,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.cursbnr.CursBNR.HomeScreen;
 import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
+import com.example.cursbnr.CursBNR.HomeScreen;
 import com.example.cursbnr.Inventar.Inventar;
 
 public class InterfataPrincipala extends Activity {
 
-    Button btnInventar,btnCursBNR;
+    Button btnInventar, btnCursBNR;
     BroadcastReceiver broadcastReceiver;
 
     @Override
@@ -29,11 +29,11 @@ public class InterfataPrincipala extends Activity {
         broadcastReceiver = new CheckingConnection();
 
         registeredNetwork();
-        OnBtnCursBNRClick();
-        OnBtnInventarClick();
+        onBtnCursBNRClick();
+        onBtnInventarClick();
     }
 
-    private void OnBtnCursBNRClick(){
+    private void onBtnCursBNRClick() {
         btnCursBNR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +43,7 @@ public class InterfataPrincipala extends Activity {
         });
     }
 
-    private void OnBtnInventarClick(){
+    private void onBtnInventarClick() {
         btnInventar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

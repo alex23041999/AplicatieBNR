@@ -68,7 +68,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     DateBaseHelper dateBaseHelper1;
     ArrayList<ObjectInventar> objectInventars;
     RecyclerView.SmoothScroller smoothScroller;
-    private static final String File_name = "proiectPracticaCSV.csv";
+    private static final String file_name = "proiectPracticaCSV.csv";
     FileWriter mFileWriter;
     private File f;
 
@@ -112,13 +112,14 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         et_cantitate = inflatedView.findViewById(R.id.cantitate_produs);
     }
 
+    //btnSalvareCSVonClick ->functie prin care elementele din lista se salveaza in memoria telefonului sub forma unui fisier CSV
     private void btnSalvareCSVonClick() {
         btn_salvareCSV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     String baseDir = android.os.Environment.getExternalStoragePublicDirectory("ProiectPractica").getAbsolutePath();
-                    String filePath = baseDir + File.separator + File_name;
+                    String filePath = baseDir + File.separator + file_name;
                     f = new File(filePath);
                     CSVWriter writer;
 
@@ -147,12 +148,13 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         });
     }
 
+    //btnTrimitereOnClick -> functie in care se verifica exista si marimea fisierul CSV , iar in caz ca acesta exista si contine elementele , va fi trimis pe calea selectata
     private void btnTrimitereOnClick() {
         btn_trimitereCSV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (f.exists() && f.length() > 0) {
-                    try {
+                try {
+                    if (f.exists() && f.length() > 0) {
                         Context context = getApplicationContext();
                         Uri path = FileProvider.getUriForFile(context, "com.example.cursbnr.fileprovider", f);
                         Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -161,16 +163,17 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         sendIntent.putExtra(Intent.EXTRA_STREAM, path);
                         startActivity(Intent.createChooser(sendIntent, "Send E-mail"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        Toast.makeText(Inventar.this, "Nu exista niciun fisier CSV salvat.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(Inventar.this, "Nu exista niciun fisier CSV salvat.", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
     }
 
+    //btnScanareOnClick -> functie prin care pornim camera telefonului si scanam un cod de bare
     private void btnScanareOnClick() {
         btn_scanare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,13 +187,14 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         });
     }
 
+    //onActivityResult -> functie in care primim codul scanat cu ajutorul camerei si pe care il introducem in EditText
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
-                Toast.makeText(this, "Eroare", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Nu s-a gasit niciun cod", Toast.LENGTH_SHORT).show();
             } else if (intentResult.getContents().length() == 12) {
                 et_codBare.setText(intentResult.getContents());
 
@@ -229,6 +233,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 
     public static String codbareTAG;
 
+    //editTextCodbare -> functie prin care urmarim EditText-ul ce contine codul de bare scanat/introdus pentru a realizeaza operatiile dorite
     private void editTextCodbare() {
         et_codBare.addTextChangedListener(new TextWatcher() {
             @Override
@@ -237,7 +242,6 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //adapter.filterList(s);
             }
 
             @Override
@@ -245,19 +249,18 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                 int i = -1;
                 if (s.toString().length() == 12) {
                     et_codBare.clearFocus();
-//                    try {
-//                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     for (ObjectInventar item : objectInventars) {
                         if (item.getCodbare().equals(s.toString())) {
                             i = objectInventars.indexOf(item);
                             objectInventars.get(i).setCantitate(objectInventars.get(i).getCantitate() + 1);
                             codbareTAG = objectInventars.get(i).getCodbare();
-                            //Toast.makeText(Inventar.this, "Codul de bare introdus apartine produsului: " + objectInventars.get(i).getDenumire().toUpperCase(), Toast.LENGTH_LONG).show();
                             smoothScroller.setTargetPosition(i);
                             recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
                         }
@@ -265,8 +268,14 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                     if (i == -1) {
                         Toast.makeText(Inventar.this, "Codul de bare introdus nu exista !", Toast.LENGTH_SHORT).show();
                         et_codBare.getText().clear();
-                        //et_codBare.requestFocus();
                         et_codBare.clearFocus();
+                        try {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -311,6 +320,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                 ));
     }
 
+    //retrofit -> functia in care am introdus valorile preluate din Json-ul creat in baza noastra de date
     private void retrofit() {
         final JsonFakeApi service = ApiServiceGenerator.createService(JsonFakeApi.class);
         Call<FakeApiResponse> call = service.getProduse();
@@ -324,7 +334,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                         for (int i = 0; i < response.body().produse.size(); i++) {
                             dateBaseHelper1.insertValuesInventar(response.body().produse.get(i));
                         }
-                        dateBaseHelper1.DeleteDatasInventar();
+                        dateBaseHelper1.deleteDatasInventar();
                         objectInventars.clear();
                         if (!dateBaseHelper1.isEmpty()) {
                             for (int i = 0; i < dateBaseHelper1.getObjects().size(); i++) {
@@ -383,13 +393,13 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     try {
-                        if(et_codBare.getText().toString().length() != 12){
+                        if (et_codBare.getText().toString().length() != 12) {
                             Toast.makeText(Inventar.this, "Cod de bare invalid", Toast.LENGTH_SHORT).show();
                             et_codBare.getText().clear();
                             et_codBare.clearFocus();
                             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                        }else if(et_codBare.getText().toString().length() == 12){
+                        } else if (et_codBare.getText().toString().length() == 12) {
                             et_codBare.clearFocus();
                             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -425,12 +435,10 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 
     @Override
     public void onClick(int rowCount) {
-        if(objectInventars.get(rowCount).getCodbare() != null){
+        if (objectInventars.get(rowCount).getCodbare() != null) {
             et_codBare.setText(objectInventars.get(rowCount).getCodbare());
-            //et_codBare.clearFocus();
-        }else{
+        } else {
             et_codBare.getText().clear();
-           // et_codBare.clearFocus();
         }
     }
 

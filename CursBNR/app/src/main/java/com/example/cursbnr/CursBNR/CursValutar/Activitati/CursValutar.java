@@ -55,7 +55,7 @@ public class CursValutar extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curs_valutar);
-        InitComponents();
+        initComponents();
 
         monede = new ArrayList<>();
         valori = new ArrayList<>();
@@ -64,7 +64,7 @@ public class CursValutar extends Activity {
         registeredNetwork();
     }
 
-    private void InitComponents() {
+    private void initComponents() {
         tv_cursvalutar = findViewById(R.id.tv_cursvalutar);
         tv_datacurenta = findViewById(R.id.tv_datacurenta);
         recyclerView = findViewById(R.id.recyclerview_cursvalutar);
@@ -91,7 +91,7 @@ public class CursValutar extends Activity {
     protected void onStart() {
         super.onStart();
         compositeDisposable = new CompositeDisposable();
-        ProgressDialog progressDialog = new ProgressDialog(this,R.style.ProgressDialogStyle);
+        ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -110,6 +110,7 @@ public class CursValutar extends Activity {
                 ));
     }
 
+    //getContentFromUrl -> functie prin care se stabileste conexiunea la Url si se preia continutul acestuia
     public String getContentFromUrl() throws IOException {
         URL url = new URL(url_bnr);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -132,12 +133,12 @@ public class CursValutar extends Activity {
         return result.toString();
     }
 
+    //fetchXML -> functie prin care input-ului parser-ului i se atribuie continutul din Url si in care se realizeaza parsarea propriu-zisa
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void fetchXML() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
                 XmlPullParserFactory xmlPullParserFactory;
                 try {
                     InputStream is = new ByteArrayInputStream(getContentFromUrl().getBytes(StandardCharsets.UTF_8));
@@ -157,11 +158,12 @@ public class CursValutar extends Activity {
         thread.start();
     }
 
+    //parsareXML -> functia in care se defineste procesul de parsare, pentru a obtine datele necesare
     public void parsareXML(XmlPullParser parser) throws XmlPullParserException, IOException {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     int event = parser.getEventType();
                     final UrlParser[] linie_curenta = {null};
                     String getData = "";
@@ -180,7 +182,7 @@ public class CursValutar extends Activity {
                                     if (nume_camp.equals("Rate")) {
                                         monede.add(parser.getAttributeValue(null, "currency"));
                                         valori.add(parser.nextText());
-                                        SetFlags(i);
+                                        setFlags(i);
                                         i++;
                                     }
                                 }
@@ -229,7 +231,7 @@ public class CursValutar extends Activity {
         unregisteredNetwork();
     }
 
-    public void SetFlags(int i) {
+    public void setFlags(int i) {
         if ((monede.get(i)).equals("AED")) {
             flags[0] = R.drawable.aed;
         } else if ((monede.get(i)).equals("AUD")) {

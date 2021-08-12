@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.example.cursbnr.R;
 
+// clasa utilizata pentru verificarea conexiunii la internet
 public class CheckingConnection extends BroadcastReceiver {
     Context mContext;
 

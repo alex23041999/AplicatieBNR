@@ -23,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat"
         android:requestLegacyExternalStorage="true">
-        <activity android:name=".Inventar.Inventar"></activity>
+        <activity android:name=".Inventar.Inventar"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".InterfataPrincipala">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

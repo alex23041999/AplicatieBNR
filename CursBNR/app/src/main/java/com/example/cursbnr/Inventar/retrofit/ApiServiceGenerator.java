@@ -12,6 +12,7 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+//clasa cu ajutorul careia facem legatura cu FakeApi-ul creat pe site-ul FakeJson
 public class ApiServiceGenerator {
     private static OkHttpClient httpClient = new OkHttpClient.Builder()
             .addInterceptor(new Interceptor() {

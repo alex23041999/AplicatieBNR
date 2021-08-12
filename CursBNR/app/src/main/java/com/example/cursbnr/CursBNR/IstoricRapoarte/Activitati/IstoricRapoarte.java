@@ -36,7 +36,7 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_istoric_rapoarte);
-        InitComponents();
+        initComponents();
         registeredNetwork();
 
         moneda = new ArrayList<>();
@@ -55,46 +55,46 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
         recyclerView_Istoric.addItemDecoration(dividerItemDecoration);
         broadcastReceiver2 = new CheckingConnection();
 
-        dateBaseHelper.DeleteDatas();
-        SetMonede();
-        SetDateStart();
-        SetDateFinal();
-        SetTipuri();
+        dateBaseHelper.deleteDatas();
+        setMonede();
+        setDateStart();
+        setDateFinal();
+        setTipuri();
         adapter.notifyDataSetChanged();
     }
 
-    private void InitComponents() {
+    private void initComponents() {
         recyclerView_Istoric = findViewById(R.id.recycler_istoricrapoarte);
     }
 
-    public void SetMonede() {
+    public void setMonede() {
         int i = 0;
-        while (i < dateBaseHelper.GetMonede().size()) {
-            moneda.add(dateBaseHelper.GetMonede().get(i));
+        while (i < dateBaseHelper.getMonede().size()) {
+            moneda.add(dateBaseHelper.getMonede().get(i));
             i++;
         }
     }
 
-    public void SetDateStart() {
+    public void setDateStart() {
         int i = 0;
-        while (i < dateBaseHelper.GetMonede().size()) {
-            datastart.add(dateBaseHelper.GetDataStart().get(i));
+        while (i < dateBaseHelper.getMonede().size()) {
+            datastart.add(dateBaseHelper.getDataStart().get(i));
             i++;
         }
     }
 
-    public void SetDateFinal() {
+    public void setDateFinal() {
         int i = 0;
-        while (i < dateBaseHelper.GetMonede().size()) {
-            datafinal.add(dateBaseHelper.GetDataSfarsit().get(i));
+        while (i < dateBaseHelper.getMonede().size()) {
+            datafinal.add(dateBaseHelper.getDataSfarsit().get(i));
             i++;
         }
     }
 
-    public void SetTipuri() {
+    public void setTipuri() {
         int i = 0;
-        while (i < dateBaseHelper.GetMonede().size()) {
-            tip_raport.add(dateBaseHelper.GetTip().get(i));
+        while (i < dateBaseHelper.getMonede().size()) {
+            tip_raport.add(dateBaseHelper.getTip().get(i));
             i++;
         }
     }
@@ -119,6 +119,7 @@ public class IstoricRapoarte extends Activity implements OnRecyclerViewRowClick 
         unregisteredNetwork();
     }
 
+    //onClick -> functie prin care setam elementele ce vor urma sa fie trimise prin intent catre clasa GenerareRapoarte, la apasarea pe un rand din lista
     @Override
     public void onClick(int rowCount) {
         Intent intent = new Intent(this, GenerareRapoarte.class);

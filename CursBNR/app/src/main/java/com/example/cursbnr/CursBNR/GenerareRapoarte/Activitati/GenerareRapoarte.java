@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,8 +34,6 @@ import com.example.cursbnr.CursBNR.CursValutar.Utile.UrlParser;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.MonedaValoare;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.RecyclerView_TipLista_Adapter;
-import com.example.cursbnr.CursBNR.HomeScreen;
-import com.example.cursbnr.CursBNR.IstoricRapoarte.Activitati.IstoricRapoarte;
 import com.example.cursbnr.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -103,7 +100,6 @@ public class GenerareRapoarte extends AppCompatActivity {
     boolean typeLista = false;
     boolean typeExist = false;
     int i = 0;
-    IstoricRapoarte istoricRapoarte;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -111,7 +107,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generare_rapoarte);
 
-        InitComponents();
+        initComponents();
 
         valori = new ArrayList<>();
         zile = new ArrayList<>();
@@ -123,18 +119,18 @@ public class GenerareRapoarte extends AppCompatActivity {
         broadcastReceiver1 = new CheckingConnection();
         dateBaseHelper = new DateBaseHelper(GenerareRapoarte.this);
 
-        initRV();
-        EtStartDateClick();
-        EtEndDateClick();
-        OnToggleBtnGraficClick();
-        OnToggleBtnListaClick();
-        OnClickButtonSalvare();
-        registeredNetwork();
-        SpinnerToast();
         populateSpinnerAdapter();
+        etStartDateClick();
+        etEndDateClick();
+        onToggleBtnGraficClick();
+        onToggleBtnListaClick();
+        onClickButtonSalvare();
+        registeredNetwork();
+        spinnerToast();
+        initRV();
     }
 
-    private void InitComponents() {
+    private void initComponents() {
         sp_selectaremoneda = findViewById(R.id.spinner_selectaremoneda);
         tv_selectaremoneda = findViewById(R.id.tv_selectmoneda);
         et_datastart = findViewById(R.id.et_datainceput);
@@ -152,7 +148,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         compositeDisposable = new CompositeDisposable();
-        ProgressDialog progressDialog = new ProgressDialog(this,R.style.ProgressDialogStyle);
+        ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -160,7 +156,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         String mesagge = new String("Datele se încarcă !");
         progressDialog.setMessage(mesagge);
         progressDialog.show();
-        compositeDisposable.add(Observable.timer(1, TimeUnit.SECONDS)
+        compositeDisposable.add(Observable.timer(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -171,6 +167,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                 ));
     }
 
+    //istoricRapoarteIntent -> functie prin care se verifica valorile primite prin intent din clasa IstoricRapoarte si atribuite campurilor din GenerareRapoarte
     private void istoricRapoarteIntent() {
         intent = getIntent();
 
@@ -223,13 +220,13 @@ public class GenerareRapoarte extends AppCompatActivity {
         }
     }
 
-    private void SetIntervale(String di, String ds) {
+    private void setIntervale(String di, String ds) {
         for (int i = 0; i < monede.size(); i++) {
             intervale.add(di + "\n" + ds);
         }
     }
 
-    private void SpinnerToast() {
+    private void spinnerToast() {
         sp_selectaremoneda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
@@ -248,12 +245,12 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     }
 
-    private void ClearGrafic() {
+    private void clearGrafic() {
         zile.clear();
         valori.clear();
     }
 
-    private void ClearLista() {
+    private void clearLista() {
         monede.clear();
         intervale.clear();
         min.clear();
@@ -271,6 +268,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         sp_selectaremoneda.setAdapter(adapter_spinner);
     }
 
+    //getContentFromUrl -> functie prin care se stabileste conexiunea la Url si se preia continutul acestuia
     public String getContentFromUrl() throws IOException {
         URL url = new URL(url_bnr);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -293,6 +291,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         return result.toString();
     }
 
+    //fetchXML -> functie prin care input-ului parser-ului i se atribuie continutul din Url si in care se realizeaza parsarea propriu-zisa
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void fetchXML() {
         Thread thread = new Thread(new Runnable() {
@@ -317,6 +316,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         thread.start();
     }
 
+    //parsareXML -> functia in care se defineste procesul de parsare, pentru a obtine datele necesare
     public void parsareXML(XmlPullParser parser) throws XmlPullParserException, IOException {
         int event = parser.getEventType();
         final UrlParser[] linie_curenta = {null};
@@ -342,7 +342,8 @@ public class GenerareRapoarte extends AppCompatActivity {
         }
     }
 
-    private void Calendar(EditText editText) {
+    //calendar -> functie prin care se genereaza calendarul din care selectam perioadele
+    private void calendar(EditText editText) {
         editText.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -383,20 +384,20 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     }
 
-    private void EtStartDateClick() {
+    private void etStartDateClick() {
         et_datastart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar(et_datastart);
+                calendar(et_datastart);
             }
         });
     }
 
-    private void EtEndDateClick() {
+    private void etEndDateClick() {
         et_datafinal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar(et_datafinal);
+                calendar(et_datafinal);
             }
         });
     }
@@ -408,17 +409,20 @@ public class GenerareRapoarte extends AppCompatActivity {
         }
 
         LineDataSet linedataset = new LineDataSet(entries, "Valori moneda");
-        linedataset.setColor(Color.parseColor("#a2dae2"));
+        linedataset.setColor(Color.parseColor("#3734FE"));
         linedataset.setLineWidth(2);
         linedataset.setValueTextSize(10);
-        linedataset.setValueTextColor(Color.parseColor("#ff1d0b"));
+        linedataset.setValueTextColor(Color.parseColor("#000000"));
+        linechart.getDescription().setEnabled(false);
+        linechart.getAxisLeft().setTextColor(getResources().getColor(R.color.blue));
+        linechart.getAxisRight().setDrawLabels(false);
 
         LineData lineData = new LineData(linedataset);
         linechart.setData(lineData);
         linechart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(zile));
         linechart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        linechart.getXAxis().setTextColor(Color.parseColor("#a2dae2"));
-        linechart.getXAxis().setTextSize(5);
+        linechart.getXAxis().setTextColor(Color.parseColor("#3734FE"));
+        linechart.getXAxis().setTextSize(8);
 
         linechart.invalidate();
         linechart.setVisibleXRangeMaximum(5);
@@ -426,7 +430,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         linechart.moveViewToX(1);
     }
 
-    private Integer CompareDates(EditText start, EditText sfarsit) {
+    private Integer compareDates(EditText start, EditText sfarsit) {
         Date begin = null;
         Date end = null;
         int i = 0;
@@ -451,7 +455,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         return i;
     }
 
-    private void OnToggleBtnGraficClick() {
+    private void onToggleBtnGraficClick() {
         btn_grafic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -460,13 +464,13 @@ public class GenerareRapoarte extends AppCompatActivity {
                     if (et_datastart.getText().toString().trim().equals("") || et_datafinal.getText().toString().trim().equals("")) {
                         Toast.makeText(GenerareRapoarte.this, "Completati toate campurile!", Toast.LENGTH_SHORT).show();
                         linechart.setVisibility(View.INVISIBLE);
-                    } else if (CompareDates(et_datastart, et_datafinal) > 0) {
+                    } else if (compareDates(et_datastart, et_datafinal) > 0) {
                         linechart.setVisibility(View.INVISIBLE);
                         Toast.makeText(GenerareRapoarte.this, "Selectati o ordine cronologica a datelor!", Toast.LENGTH_SHORT).show();
                     } else if (sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele") || sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda")) {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip grafic poate fi afisat doar pentru o moneda!", Toast.LENGTH_SHORT).show();
                     } else {
-                        ClearGrafic();
+                        clearGrafic();
                         typeGrafic = true;
                         typeLista = false;
                         getValuesFromBNRForGrafic(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
@@ -477,7 +481,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         });
     }
 
-    private void OnToggleBtnListaClick() {
+    private void onToggleBtnListaClick() {
         btn_lista.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -486,25 +490,25 @@ public class GenerareRapoarte extends AppCompatActivity {
                     if (et_datastart.getText().toString().trim().equals("") || et_datafinal.getText().toString().trim().equals("")) {
                         Toast.makeText(GenerareRapoarte.this, "Completati toate campurile!", Toast.LENGTH_SHORT).show();
                         linearLayout.setVisibility(View.INVISIBLE);
-                    } else if (CompareDates(et_datastart, et_datafinal) > 0) {
+                    } else if (compareDates(et_datastart, et_datafinal) > 0) {
                         linechart.setVisibility(View.INVISIBLE);
                         Toast.makeText(GenerareRapoarte.this, "Selectati o ordine cronologica a datelor!", Toast.LENGTH_SHORT).show();
                     } else if (!sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele")) {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip lista poate fi afisat doar pentru toate monedele!", Toast.LENGTH_SHORT).show();
                     } else {
-                        ClearLista();
+                        clearLista();
                         typeLista = true;
                         typeGrafic = false;
                         getValuesFromBNRForLista(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
-                    //
+
                 }
             }
         });
     }
 
-    private void OnClickButtonSalvare() {
+    private void onClickButtonSalvare() {
         btn_salvare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -524,19 +528,15 @@ public class GenerareRapoarte extends AppCompatActivity {
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-//                else if (typeExist == true && typeLista == false && typeGrafic == false) {
-//                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
                 } else if (typeLista == false && typeGrafic == false) {
                     Toast.makeText(GenerareRapoarte.this, "Selectati o varianta de salvare a raportului !", Toast.LENGTH_SHORT).show();
                 }
-//                else if (typeExist == true && typeLista == false && typeGrafic == false) {
-//                    Toast.makeText(GenerareRapoarte.this, "Raportul există deja în istoric.", Toast.LENGTH_SHORT).show();
-//                }
             }
         });
     }
 
-    public String GetContentFromUrl() throws IOException {
+    //getContentFromUrlAnual ->functie prin care se stabileste conexiunea la Url-ul anual si se preia continutul acestuia
+    public String getContentFromUrlAnual() throws IOException {
         URL url = new URL(url_2021);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setReadTimeout(10000);
@@ -560,7 +560,8 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     private Thread worker;
 
-    public void ParsareRaportXMLForGrafic(XmlPullParser parser, String m, String di, String ds) throws XmlPullParserException, IOException {
+    //parsareRaportXMLForGrafic -> functia in care se defineste procesul de parsare, pentru a obtine datele necesare pentru a obtine datele necesare trasarii graficului
+    public void parsareRaportXMLForGrafic(XmlPullParser parser, String m, String di, String ds) throws XmlPullParserException, IOException {
         final int[] event = {parser.getEventType()};
         final String[] date = {new String()};
         MonedaValoare monedaValoare = new MonedaValoare();
@@ -577,9 +578,9 @@ public class GenerareRapoarte extends AppCompatActivity {
                             setLinechartValues();
                             linechart.setVisibility(View.VISIBLE);
                             linearLayout.setVisibility(View.INVISIBLE);
-                            btn_lista.setTextColor(Color.parseColor("#ff0000"));
-                            btn_grafic.setTextColor(Color.parseColor("#7fff00"));
-                            ClearLista();
+                            btn_lista.setTextColor(Color.parseColor("#FFFFFF"));
+                            btn_grafic.setTextColor(Color.parseColor("#000000"));
+                            clearLista();
                         } else {
                             linechart.setVisibility(View.INVISIBLE);
                             Toast.makeText(GenerareRapoarte.this, "Nu s-au gasit date!", Toast.LENGTH_SHORT).show();
@@ -589,6 +590,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                 });
             }
 
+            //download ->functie ce returneaza "true" in cazul in care sunt gasite date
             public boolean download() {
                 boolean isDownload = false;
                 while (event[0] != XmlPullParser.END_DOCUMENT) {
@@ -648,6 +650,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                                             calendarFinal.setTime(end);
                                             Calendar calendarData = Calendar.getInstance();
                                             calendarData.setTime(data);
+                                            //verificari ale datei intalnite in Url, intrucat trebuie preluate doar valorile din intervalul ales de utilizator
                                             if (((calendarData.after(calendarStart) && calendarData.before(calendarFinal))
                                                     || calendarData.equals(calendarStart)
                                                     || calendarData.equals(calendarFinal))) {
@@ -706,6 +709,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         worker.start();
     }
 
+    //getValuesFromBNRForGrafic -> functie prin care input-ului parser-ului i se atribuie continutul din Url si in care se realizeaza parsarea propriu-zisa
     public void getValuesFromBNRForGrafic(String m, String di, String ds) {
         Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -714,7 +718,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        progressDialog = new ProgressDialog(GenerareRapoarte.this,R.style.ProgressDialogStyle);
+                        progressDialog = new ProgressDialog(GenerareRapoarte.this, R.style.ProgressDialogStyle);
                         progressDialog.setCancelable(false);
                         progressDialog.setCanceledOnTouchOutside(false);
                         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -726,12 +730,12 @@ public class GenerareRapoarte extends AppCompatActivity {
 
                 XmlPullParserFactory xmlPullParserFactory;
                 try {
-                    InputStream is = new ByteArrayInputStream(GetContentFromUrl().getBytes(StandardCharsets.UTF_8));
+                    InputStream is = new ByteArrayInputStream(getContentFromUrlAnual().getBytes(StandardCharsets.UTF_8));
                     xmlPullParserFactory = XmlPullParserFactory.newInstance();
                     XmlPullParser parser = xmlPullParserFactory.newPullParser();
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                     parser.setInput(is, null);
-                    ParsareRaportXMLForGrafic(parser, m, di, ds);
+                    parsareRaportXMLForGrafic(parser, m, di, ds);
                     if (is != null) {
                         is.close();
                     }
@@ -745,8 +749,8 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     private Thread worker1;
 
+    //parsareRaportXMLForLista -> functia in care se defineste procesul de parsare, pentru a obtine datele necesare pentru formarea listei
     public void ParsareRaportXMLForLista(XmlPullParser parser, String m, String di, String ds) throws XmlPullParserException, IOException {
-        //parsare xml
         mapmin = new LinkedHashMap<>();
         mapmax = new LinkedHashMap<>();
         final int[] event = {parser.getEventType()};
@@ -770,14 +774,14 @@ public class GenerareRapoarte extends AppCompatActivity {
                                 max.add(map1.getValue());
                             }
                             monede = (ArrayList<String>) monede.stream().sorted().collect(Collectors.toList());
-                            SetIntervale(di, ds);
+                            setIntervale(di, ds);
                             progressDialog.hide();
                             valori.clear();
                             zile.clear();
                             linearLayout.setVisibility(View.VISIBLE);
                             linechart.setVisibility(View.INVISIBLE);
-                            btn_grafic.setTextColor(Color.parseColor("#ff0000"));
-                            btn_lista.setTextColor(Color.parseColor("#7fff00"));
+                            btn_grafic.setTextColor(Color.parseColor("#FFFFFF"));
+                            btn_lista.setTextColor(Color.parseColor("#000000"));
                             adapter.notifyDataSetChanged();
                         } else {
                             linearLayout.setVisibility(View.INVISIBLE);
@@ -788,6 +792,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                 });
             }
 
+            //download ->functie ce returneaza "true" in cazul in care sunt gasite date
             public boolean download() {
                 boolean isDownload = false;
                 while (event[0] != XmlPullParser.END_DOCUMENT) {
@@ -846,11 +851,13 @@ public class GenerareRapoarte extends AppCompatActivity {
                                             calendarFinal.setTime(end);
                                             Calendar calendarData = Calendar.getInstance();
                                             calendarData.setTime(data);
+                                            //verificari ale datei intalnite in Url, intrucat trebuie preluate doar valorile din intervalul ales de utilizator
                                             if (((calendarData.after(calendarStart) && calendarData.before(calendarFinal))
                                                     || calendarData.equals(calendarStart)
                                                     || calendarData.equals(calendarFinal))) {
                                                 String s = new String(parser.getAttributeValue(null, "currency"));
                                                 parser.next();
+                                                //pentru stabilirea valorilor de minim si maxim pentru lista, am folosit doua LinkedHashMaps
                                                 if (mapmin.containsKey(s)) {
                                                     if (Float.parseFloat(String.valueOf(mapmin.get(s))) > Float.parseFloat(parser.getText())) {
                                                         mapmin.put(s, Float.parseFloat(parser.getText()));
@@ -907,6 +914,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         worker1.start();
     }
 
+    //getValuesFromBNRForLista -> functie prin care input-ului parser-ului i se atribuie continutul din Url si in care se realizeaza parsarea propriu-zisa
     public void getValuesFromBNRForLista(String m, String di, String ds) {
         Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -915,7 +923,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        progressDialog = new ProgressDialog(GenerareRapoarte.this,R.style.ProgressDialogStyle);
+                        progressDialog = new ProgressDialog(GenerareRapoarte.this, R.style.ProgressDialogStyle);
                         progressDialog.setCancelable(false);
                         progressDialog.setCanceledOnTouchOutside(false);
                         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -927,7 +935,7 @@ public class GenerareRapoarte extends AppCompatActivity {
 
                 XmlPullParserFactory xmlPullParserFactory;
                 try {
-                    InputStream is = new ByteArrayInputStream(GetContentFromUrl().getBytes(StandardCharsets.UTF_8));
+                    InputStream is = new ByteArrayInputStream(getContentFromUrlAnual().getBytes(StandardCharsets.UTF_8));
                     xmlPullParserFactory = XmlPullParserFactory.newInstance();
                     XmlPullParser parser = xmlPullParserFactory.newPullParser();
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);

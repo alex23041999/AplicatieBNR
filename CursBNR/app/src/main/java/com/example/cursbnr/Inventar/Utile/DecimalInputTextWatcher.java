@@ -6,6 +6,8 @@ import android.widget.EditText;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+//clasa pentru a limita numarul de cifre introdus de catre utilizator in EditText
 public class DecimalInputTextWatcher implements TextWatcher {
 
     private String mPreviousValue;

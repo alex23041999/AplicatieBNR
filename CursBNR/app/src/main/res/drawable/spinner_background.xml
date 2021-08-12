@@ -4,12 +4,12 @@
     <layer-list>
         <item>
             <shape android:shape="rectangle">
-                <gradient android:angle="0" android:startColor="#1ca0d0" android:endColor="#f07eff" android:type="linear"/>
+                <gradient android:angle="0" android:startColor="#7472FE" android:endColor="#7472FE" android:type="linear"/>
                 <corners android:radius="8dp"/>
             </shape>
         </item>
         <item>
-            <bitmap android:src="@drawable/spinner_arrow"
+            <bitmap android:src="@drawable/spinner_arrowv2"
                 android:gravity="center|end"/>
         </item>
     </layer-list>

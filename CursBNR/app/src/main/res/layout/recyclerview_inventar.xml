@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="4"
-    android:background="@drawable/background_recyclerview"
+    android:background="@drawable/background_recycleristoric"
     android:id="@+id/linearlayout_inventar">
 
     <TextView
@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Denumire"
+        android:textColor="#FFFFFF"
         android:gravity="center"
         android:layout_weight="1"/>
     <TextView
@@ -19,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pret"
+        android:textColor="#FFFFFF"
         android:gravity="center"
         android:layout_weight="1.1"/>
     <TextView
@@ -26,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cod bare"
+        android:textColor="#FFFFFF"
         android:gravity="center"
         android:layout_weight="0.9"/>
     <EditText
@@ -33,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Cantitate"
+        android:textColor="#FFFFFF"
         android:gravity="center"
         android:layout_weight="1"
         android:imeOptions="actionDone"

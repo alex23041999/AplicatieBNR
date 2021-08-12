@@ -43,7 +43,7 @@
             android:lines="2"
             android:text="Verificați conexiunea la internet și încercați din nou !"
             android:textSize="15sp"
-            android:textColor="#301473"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:layout_weight="1.2"/>
         <Button
@@ -55,10 +55,10 @@
             android:layout_weight="0.8"
             android:layout_marginLeft="70dp"
             android:layout_marginRight="70dp"
-            android:textColor="#00e0e1"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:background="@drawable/gradient_ripple"/>
+            android:background="@drawable/background_buttoninternet"/>
     </LinearLayout>
 
 </LinearLayout>

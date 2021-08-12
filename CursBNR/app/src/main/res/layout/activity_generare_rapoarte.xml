@@ -151,7 +151,7 @@
                     android:background="@drawable/togglebuttonleft_style"
                     android:checked="false"
                     android:clickable="true"
-                    android:textColor="#50ff3b"
+                    android:textColor="#FFFFFF"
                     android:textOff="Grafic"
                     android:textOn="Grafic"
                     android:textStyle="italic|bold"/>
@@ -166,7 +166,7 @@
                     android:background="@drawable/togglebuttonright_style"
                     android:checked="false"
                     android:clickable="true"
-                    android:textColor="#7fff00"
+                    android:textColor="#FFFFFF"
                     android:textOff="Lista"
                     android:textOn="Lista"
                     android:textStyle="italic|bold"/>
@@ -182,7 +182,7 @@
                     android:checked="false"
                     android:clickable="true"
                     android:text="Salvare raport"
-                    android:textColor="#7fff00"
+                    android:textColor="#FFFFFF"
                     android:textStyle="italic|bold"/>
             </LinearLayout>
         </LinearLayout>
@@ -233,7 +233,7 @@
                         android:layout_weight="0.9"
                         android:gravity="center"
                         android:text="Moneda"
-                        android:textColor="#301473"
+                        android:textColor="#FFFFFF"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -244,7 +244,7 @@
                         android:layout_weight="0.9"
                         android:gravity="center"
                         android:text="Interval"
-                        android:textColor="#301473"
+                        android:textColor="#FFFFFF"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -255,7 +255,7 @@
                         android:layout_weight="1.1"
                         android:gravity="center"
                         android:text="Min"
-                        android:textColor="#301473"
+                        android:textColor="#FFFFFF"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -266,7 +266,7 @@
                         android:layout_weight="1.1"
                         android:gravity="center"
                         android:text="Max"
-                        android:textColor="#301473"
+                        android:textColor="#FFFFFF"
                         android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>

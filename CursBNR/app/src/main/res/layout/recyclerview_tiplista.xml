@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="4"
-    android:background="@drawable/background_recyclerview">
+    android:background="@drawable/background_reclyclergenerarerapoarte">
 
     <LinearLayout
         android:id="@+id/linearlayout_tiplista"
@@ -30,7 +30,7 @@
                 android:layout_weight="0.9"
                 android:gravity="center"
                 android:text="Moneda"
-                android:textColor="#301473"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
                 android:layout_weight="0.9"
                 android:gravity="center"
                 android:text="Interval"
-                android:textColor="#301473"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                 android:layout_weight="1.1"
                 android:gravity="center"
                 android:text="Min"
-                android:textColor="#301473"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
                 android:layout_weight="1.1"
                 android:gravity="center"
                 android:text="Max"
-                android:textColor="#301473"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold" />
         </LinearLayout>
