@@ -97,9 +97,10 @@ public class GenerareRapoarte extends AppCompatActivity {
     Map<String, Float> mapmax;
     Intent intent;
     boolean typeGrafic = false;
-    boolean typeLista = false;
-    boolean typeExist = false;
+//    boolean typeLista = false;
+//    boolean typeExist = false;
     int i = 0;
+    ArrayAdapter<String> adapter_spinner;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -126,7 +127,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         onToggleBtnListaClick();
         onClickButtonSalvare();
         registeredNetwork();
-        spinnerToast();
+        spinnerItemSelected();
         initRV();
     }
 
@@ -195,12 +196,12 @@ public class GenerareRapoarte extends AppCompatActivity {
         }
 
         if (!tip.isEmpty()) {
-            if (tip.equals("Tip grafic")) {
+            if (tip.equals("Grafic")) {
                 getValuesFromBNRForGrafic(moneda, dataInceput, dataSfarsit);
-                typeExist = true;
-            } else if (tip.equals("Tip lista")) {
+                //typeExist = true;
+            } else if (tip.equals("Lista")) {
                 getValuesFromBNRForLista(moneda, dataInceput, dataSfarsit);
-                typeExist = true;
+                //typeExist = true;
             }
         }
     }
@@ -226,13 +227,21 @@ public class GenerareRapoarte extends AppCompatActivity {
         }
     }
 
-    private void spinnerToast() {
+    private void spinnerItemSelected() {
         sp_selectaremoneda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
-                if (sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda")) {
-
-                } else {
+                try {
+                    linechart.setVisibility(View.INVISIBLE);
+                    linearLayout.setVisibility(View.INVISIBLE);
+                    btn_grafic.setChecked(false);
+                    btn_lista.setChecked(false);
+                    clearGrafic();
+                    clearLista();
+                    btn_grafic.setTextColor(getResources().getColor(R.color.white));
+                    btn_lista.setTextColor(getResources().getColor(R.color.white));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -241,8 +250,6 @@ public class GenerareRapoarte extends AppCompatActivity {
                 // TODO Auto-generated method stub
             }
         });
-
-
     }
 
     private void clearGrafic() {
@@ -255,7 +262,6 @@ public class GenerareRapoarte extends AppCompatActivity {
         intervale.clear();
         min.clear();
         max.clear();
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -263,7 +269,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         values.add("Selectare moneda");
         values.add("Toate monedele");
         fetchXML();
-        ArrayAdapter<String> adapter_spinner = new ArrayAdapter<>(this, R.layout.spinner_style, values);
+        adapter_spinner = new ArrayAdapter<>(this, R.layout.spinner_style, values);
         adapter_spinner.setDropDownViewResource(R.layout.dropdown_itembackground);
         sp_selectaremoneda.setAdapter(adapter_spinner);
     }
@@ -318,6 +324,7 @@ public class GenerareRapoarte extends AppCompatActivity {
 
     //parsareXML -> functia in care se defineste procesul de parsare, pentru a obtine datele necesare
     public void parsareXML(XmlPullParser parser) throws XmlPullParserException, IOException {
+
         int event = parser.getEventType();
         final UrlParser[] linie_curenta = {null};
         while (event != XmlPullParser.END_DOCUMENT) {
@@ -340,47 +347,46 @@ public class GenerareRapoarte extends AppCompatActivity {
             }
             event = parser.next();
         }
+        try {
+            adapter_spinner.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //calendar -> functie prin care se genereaza calendarul din care selectam perioadele
     private void calendar(EditText editText) {
-        editText.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(GenerareRapoarte.this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onClick(View v) {
-                final Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                datePickerDialog = new DatePickerDialog(GenerareRapoarte.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String str = year + "-" + (month + 1) + "-" + dayOfMonth;
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        try {
-                            Date date = simpleDateFormat.parse(str);
-                            Calendar c = Calendar.getInstance();
-                            c.setTime(date);
-                            if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                                editText.getText().clear();
-                                Toast.makeText(GenerareRapoarte.this, "Nu exista actualizari ale cursului in weekend!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                editText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-                            }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String str = year + "-" + (month + 1) + "-" + dayOfMonth;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date date = simpleDateFormat.parse(str);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(date);
+                    if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        editText.getText().clear();
+                        Toast.makeText(GenerareRapoarte.this, "Nu exista actualizari ale cursului in weekend!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        editText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                     }
-
-                }, year, month, day);
-
-                Calendar min = Calendar.getInstance();
-                min.set(Calendar.DAY_OF_YEAR, 1);
-                datePickerDialog.getDatePicker().setMinDate(min.getTimeInMillis());
-                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-                datePickerDialog.show();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+
+        }, year, month, day);
+
+        Calendar min = Calendar.getInstance();
+        min.set(Calendar.DAY_OF_YEAR, 1);
+        datePickerDialog.getDatePicker().setMinDate(min.getTimeInMillis());
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        datePickerDialog.show();
 
     }
 
@@ -460,6 +466,7 @@ public class GenerareRapoarte extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    btn_grafic.setChecked(false);
                     btn_lista.setChecked(false);
                     if (et_datastart.getText().toString().trim().equals("") || et_datafinal.getText().toString().trim().equals("")) {
                         Toast.makeText(GenerareRapoarte.this, "Completati toate campurile!", Toast.LENGTH_SHORT).show();
@@ -471,11 +478,12 @@ public class GenerareRapoarte extends AppCompatActivity {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip grafic poate fi afisat doar pentru o moneda!", Toast.LENGTH_SHORT).show();
                     } else {
                         clearGrafic();
-                        typeGrafic = true;
-                        typeLista = false;
+//                        typeGrafic = true;
+//                        typeLista = false;
                         getValuesFromBNRForGrafic(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
+                    //
                 }
             }
         });
@@ -486,6 +494,7 @@ public class GenerareRapoarte extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    btn_lista.setChecked(false);
                     btn_grafic.setChecked(false);
                     if (et_datastart.getText().toString().trim().equals("") || et_datafinal.getText().toString().trim().equals("")) {
                         Toast.makeText(GenerareRapoarte.this, "Completati toate campurile!", Toast.LENGTH_SHORT).show();
@@ -497,8 +506,8 @@ public class GenerareRapoarte extends AppCompatActivity {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip lista poate fi afisat doar pentru toate monedele!", Toast.LENGTH_SHORT).show();
                     } else {
                         clearLista();
-                        typeLista = true;
-                        typeGrafic = false;
+//                        typeLista = true;
+//                        typeGrafic = false;
                         getValuesFromBNRForLista(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
@@ -512,24 +521,43 @@ public class GenerareRapoarte extends AppCompatActivity {
         btn_salvare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeGrafic == true) {
+//                if (typeGrafic == true) {
+//                    Boolean result;
+//                    result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Grafic");
+//                    if (result) {
+//                        Toast.makeText(GenerareRapoarte.this, "Tipul de raport a fost salvat cu succes !", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else if (typeLista == true) {
+//                    Boolean result;
+//                    result = dateBaseHelper.insertValues("Toate monedele", et_datastart.getText().toString(), et_datafinal.getText().toString(), "Lista");
+//                    if (result) {
+//                        Toast.makeText(GenerareRapoarte.this, "Tipul de raport a fost salvat cu succes !", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else if (typeLista == false && typeGrafic == false) {
+//                    Toast.makeText(GenerareRapoarte.this, "Selectati o varianta de salvare a raportului !", Toast.LENGTH_SHORT).show();
+//                }
+                if (sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele") && !et_datastart.getText().toString().equals("") && !et_datafinal.getText().toString().equals("") && min.size()>0) {
                     Boolean result;
-                    result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Tip grafic");
+                    result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Lista");
                     if (result) {
                         Toast.makeText(GenerareRapoarte.this, "Tipul de raport a fost salvat cu succes !", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-                } else if (typeLista == true) {
+                }else if(!sp_selectaremoneda.getSelectedItem().toString().equals("Toate monelede") && !sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda") && !et_datastart.getText().toString().equals("") && !et_datafinal.getText().toString().equals("") && valori.size()>0){
                     Boolean result;
-                    result = dateBaseHelper.insertValues("Toate monedele", et_datastart.getText().toString(), et_datafinal.getText().toString(), "Tip lista");
+                    result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Grafic");
                     if (result) {
                         Toast.makeText(GenerareRapoarte.this, "Tipul de raport a fost salvat cu succes !", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-                } else if (typeLista == false && typeGrafic == false) {
-                    Toast.makeText(GenerareRapoarte.this, "Selectati o varianta de salvare a raportului !", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(GenerareRapoarte.this, "Toate datele trebuie completate si raportul generat inainte de salvare!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -578,8 +606,8 @@ public class GenerareRapoarte extends AppCompatActivity {
                             setLinechartValues();
                             linechart.setVisibility(View.VISIBLE);
                             linearLayout.setVisibility(View.INVISIBLE);
-                            btn_lista.setTextColor(Color.parseColor("#FFFFFF"));
-                            btn_grafic.setTextColor(Color.parseColor("#000000"));
+                            btn_lista.setTextColor(getResources().getColor(R.color.white));
+                            btn_grafic.setTextColor(getResources().getColor(R.color.black));
                             clearLista();
                         } else {
                             linechart.setVisibility(View.INVISIBLE);

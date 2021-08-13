@@ -23,7 +23,6 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
 
     Context context;
     private ArrayList<ObjectInventar> objectsInventar;
-    private ArrayList<ObjectInventar> copy;
     private final OnRecyclerViewRow onRecyclerViewRow;
     private DateBaseHelper dateBaseHelper;
 
@@ -31,8 +30,6 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
         this.context = context;
         this.objectsInventar = objectsInventar;
         this.onRecyclerViewRow = onRecyclerViewRow;
-        this.copy = new ArrayList<>();
-        copy.addAll(objectsInventar);
 
     }
 
@@ -53,6 +50,34 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
         Float list_cant = objectsInventar.get(position).getCantitate();
         holder.etcantitate.setText(list_cant.toString());
 
+//        holder.etcantitate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+//                        || actionId == EditorInfo.IME_ACTION_DONE) {
+//
+//                    try {
+//                        Inventar.codbareTAG = objectsInventar.get(position).getCodbare();
+//                        new DateBaseHelper(context).updateDataBaseInventar(objectsInventar.get(position).getDenumire(), Float.valueOf(holder.etcantitate.getText().toString()));
+
+//                        notifyDataSetChanged();
+//                        holder.etcantitate.clearFocus();
+//
+//                        for (int i = 0; i < objectsInventar.size(); i++) {
+//                            if (Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(position).getCodbare())) {
+//                                holder.itemView.setBackgroundResource(R.drawable.background_selecteditem);
+//                            } else {
+//                                holder.itemView.setBackgroundResource(R.drawable.background_recycleristoric);
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+
         for (int i = 0; i < objectsInventar.size(); i++) {
             if (Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(position).getCodbare())) {
                 holder.itemView.setBackgroundResource(R.drawable.background_selecteditem);
@@ -61,6 +86,8 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
             }
         }
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -85,11 +112,20 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
                     if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
                             || actionId == EditorInfo.IME_ACTION_DONE) {
                         try {
+                            Inventar.codbareTAG = objectsInventar.get(getAbsoluteAdapterPosition()).getCodbare();
                             ObjectInventar obj = objectsInventar.get(getAbsoluteAdapterPosition());
                             obj.setCantitate(Float.valueOf((etcantitate.getText().toString())));
                             new DateBaseHelper(context).updateDataBaseInventar(obj.getDenumire(), obj.getCantitate());
                             notifyDataSetChanged();
                             etcantitate.clearFocus();
+
+                            for (int i = 0; i < objectsInventar.size(); i++) {
+                                if (Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(getAbsoluteAdapterPosition()).getCodbare())) {
+                                    itemView.setBackgroundResource(R.drawable.background_selecteditem);
+                                } else {
+                                    itemView.setBackgroundResource(R.drawable.background_recycleristoric);
+                                }
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

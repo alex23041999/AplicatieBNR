@@ -24,7 +24,7 @@
         android:theme="@style/Theme.AppCompat"
         android:requestLegacyExternalStorage="true">
         <activity android:name=".Inventar.Inventar"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity android:name=".InterfataPrincipala">
             <intent-filter>

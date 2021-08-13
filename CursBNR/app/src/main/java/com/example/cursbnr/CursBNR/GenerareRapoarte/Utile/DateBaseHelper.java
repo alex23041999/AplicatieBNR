@@ -84,11 +84,10 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         boolean empty = false;
         Cursor cursor = db.rawQuery("SELECT * FROM Inventar", null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            if (cursor.getInt(0) == 0) {
-                empty = true;
-            }
+        if (cursor.moveToFirst()) {
+            empty = false;
+        }else{
+            empty = true;
         }
         return empty;
     }
