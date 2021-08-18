@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,7 +83,7 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
             if (Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(position).getCodbare())) {
                 holder.itemView.setBackgroundResource(R.drawable.background_selecteditem);
             } else {
-                holder.itemView.setBackgroundResource(R.drawable.background_recycleristoric);
+                holder.itemView.setBackgroundResource(R.drawable.background_recyclerinventar);
             }
         }
     }

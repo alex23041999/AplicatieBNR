@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.45"
+        android:layout_weight="0.3"
         android:weightSum="1"
         android:orientation="horizontal">
 
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.8"
-            android:hint="Cod de bare"
+            android:hint="Scanare/Introducere cod de bare"
             android:layout_marginRight="25dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
@@ -46,7 +46,44 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:weightSum="1.2"
+        android:background="@drawable/textviewmargins"
+        android:layout_margin="5dp">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:text="Produs"
+            android:gravity="center"
+            android:textColor="#FFFFFF"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:text="Pret"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:layout_marginRight="25dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:text="Cod de bare"
+            android:gravity="center|left"
+            android:textColor="#FFFFFF"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:text="Cantitate"
+            android:gravity="center"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_inventar"
         android:layout_width="match_parent"
@@ -57,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="0.45"
+        android:layout_weight="0.3"
         android:weightSum="1">
 
         <Button

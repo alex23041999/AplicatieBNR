@@ -72,7 +72,7 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     FileWriter mFileWriter;
     private File f;
     public static String codbareTAG;
-    Context context;
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,6 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 
         registeredNetwork();
         initRV();
-        //initRvElements();
         doneKeyboardCodBare();
         doneKeyboardCantitate();
         editTextCodbare();
@@ -189,10 +188,9 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         sendIntent.putExtra(Intent.EXTRA_STREAM, path);
                         startActivity(Intent.createChooser(sendIntent, "Send E-mail"));
-                    } else {
-                        Toast.makeText(Inventar.this, "Nu exista niciun fisier CSV salvat.", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
+                    Toast.makeText(Inventar.this, "Nu exista niciun fisier CSV salvat.", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -248,15 +246,6 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
             @Override
             public void afterTextChanged(Editable s) {
                 int i = -1;
-                //   if (s.toString().length() == 12) {
-//                    et_codBare.clearFocus();
-//                    try {
-//                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
                 for (ObjectInventar item : objectInventars) {
                     if (item.getCodbare().equals(s.toString())) {
                         i = objectInventars.indexOf(item);
@@ -267,21 +256,11 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                         recyclerView_inventar.getLayoutManager().startSmoothScroll(smoothScroller);
                     }
                 }
-
-//                    if (i == -1) {
-//                        Toast.makeText(Inventar.this, "Codul de bare introdus nu exista !", Toast.LENGTH_SHORT).show();
-//                        et_codBare.getText().clear();
-//                        et_codBare.clearFocus();
-//                        try {
-//                            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
                 adapter.notifyDataSetChanged();
-                //  }
+                if(i == -1 && s.length() == 12){
+                    Toast.makeText(Inventar.this, "Codul de bare introdus nu exista!", Toast.LENGTH_LONG).show();
+                    et_codBare.getText().clear();
+                }
             }
         });
     }
@@ -293,35 +272,6 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         newFilters[editFilters.length] = new InputFilter.LengthFilter(12);
         editText.setFilters(newFilters);
     }
-
-//    private void initRvElements() {
-//        compositeDisposable = new CompositeDisposable();
-//        ProgressDialog progressDialog = new ProgressDialog(Inventar.this, R.style.ProgressDialogStyle);
-//        progressDialog.setCancelable(false);
-//        progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.setTitle("Procesare date");
-//        String mesagge = new String("Datele se încarcă !");
-//        progressDialog.setMessage(mesagge);
-//        progressDialog.show();
-//        compositeDisposable.add(Observable.timer(2, TimeUnit.SECONDS)
-//                .subscribeOn(Schedulers.computation())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        result -> {
-//                            if (!dateBaseHelper1.isEmpty()) {
-//                                objectInventars.clear();
-//                                for (int i = 0; i < dateBaseHelper1.getObjects().size(); i++) {
-//                                    objectInventars.add(i, dateBaseHelper1.getObjects().get(i));
-//                                }
-//                            } else {
-//                                Toast.makeText(this, "Baza de date este goala !", Toast.LENGTH_SHORT).show();
-//                            }
-//                            adapter.notifyDataSetChanged();
-//                            progressDialog.hide();
-//                        }
-//                ));
-//    }
 
     //retrofit -> functia in care am introdus valorile preluate din Json-ul creat in baza noastra de date
     private void retrofit() {
@@ -444,11 +394,6 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
 
     @Override
     public void onClick(int rowCount) {
-        if (objectInventars.get(rowCount).getCodbare() != null) {
-            et_codBare.setText(objectInventars.get(rowCount).getCodbare());
-        } else {
-            et_codBare.getText().clear();
-        }
     }
 
 }

@@ -163,16 +163,6 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         db.execSQL(del);
     }
 
-    public boolean updateDate(String moneda, String datainceput, String datasfarsit, String tipraport) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_Moneda, moneda);
-        contentValues.put(COL_DataStart, datainceput);
-        contentValues.put(COL_DataSfarsit, datasfarsit);
-        contentValues.put(COL_TipRaport, tipraport);
-        db.update(TABLE_NAME, contentValues, "MONEDA= ?", new String[]{moneda});
-        return true;
-    }
 
     public boolean updateDataBaseInventar(String denumire, Float cantitateNoua) {
         SQLiteDatabase db = this.getWritableDatabase();

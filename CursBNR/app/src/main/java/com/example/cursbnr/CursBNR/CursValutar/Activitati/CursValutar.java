@@ -5,11 +5,8 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.nfc.Tag;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -41,8 +38,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static android.content.ContentValues.TAG;
 
 public class CursValutar extends Activity {
     private CompositeDisposable compositeDisposable;
@@ -95,24 +90,28 @@ public class CursValutar extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void onStart() {
         super.onStart();
-        compositeDisposable = new CompositeDisposable();
-        ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle("Procesare date");
-        String mesagge = new String("Datele se încarcă !");
-        progressDialog.setMessage(mesagge);
-        progressDialog.show();
-        compositeDisposable.add(Observable.timer(1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        result -> {
-                            fetchXML();
-                            progressDialog.hide();
-                        }
-                ));
+        try {
+            compositeDisposable = new CompositeDisposable();
+            ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle("Procesare date");
+            String mesagge = new String("Datele se încarcă !");
+            progressDialog.setMessage(mesagge);
+            progressDialog.show();
+            compositeDisposable.add(Observable.timer(1, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            result -> {
+                                fetchXML();
+                                progressDialog.hide();
+                            }
+                    ));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //getContentFromUrl -> functie prin care se stabileste conexiunea la Url si se preia continutul acestuia

@@ -96,9 +96,6 @@ public class GenerareRapoarte extends AppCompatActivity {
     Map<String, Float> mapmin;
     Map<String, Float> mapmax;
     Intent intent;
-    boolean typeGrafic = false;
-//    boolean typeLista = false;
-//    boolean typeExist = false;
     int i = 0;
     ArrayAdapter<String> adapter_spinner;
 
@@ -148,61 +145,67 @@ public class GenerareRapoarte extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        compositeDisposable = new CompositeDisposable();
-        ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle("Procesare date");
-        String mesagge = new String("Datele se încarcă !");
-        progressDialog.setMessage(mesagge);
-        progressDialog.show();
-        compositeDisposable.add(Observable.timer(2, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        result -> {
-                            istoricRapoarteIntent();
-                            progressDialog.hide();
-                        }
-                ));
+        try {
+            compositeDisposable = new CompositeDisposable();
+            ProgressDialog progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle("Procesare date");
+            String mesagge = new String("Datele se încarcă !");
+            progressDialog.setMessage(mesagge);
+            progressDialog.show();
+            compositeDisposable.add(Observable.timer(2, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            result -> {
+                                istoricRapoarteIntent();
+                                progressDialog.hide();
+                            }
+                    ));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //istoricRapoarteIntent -> functie prin care se verifica valorile primite prin intent din clasa IstoricRapoarte si atribuite campurilor din GenerareRapoarte
     private void istoricRapoarteIntent() {
-        intent = getIntent();
+        try{
+            intent = getIntent();
 
-        String tip = "";
-        if (intent.hasExtra("tip")) {
-            tip = intent.getStringExtra("tip");
-        }
-
-        String moneda = "";
-        if (intent.hasExtra("moneda")) {
-            moneda = intent.getStringExtra("moneda");
-            sp_selectaremoneda.setSelection(values.indexOf(moneda));
-        }
-
-        String dataInceput = "";
-        if (intent.hasExtra("dataInceput")) {
-            dataInceput = intent.getStringExtra("dataInceput");
-            et_datastart.setText(dataInceput);
-        }
-
-        String dataSfarsit = "";
-        if (intent.hasExtra("dataSfarsit")) {
-            dataSfarsit = intent.getStringExtra("dataSfarsit");
-            et_datafinal.setText(dataSfarsit);
-        }
-
-        if (!tip.isEmpty()) {
-            if (tip.equals("Grafic")) {
-                getValuesFromBNRForGrafic(moneda, dataInceput, dataSfarsit);
-                //typeExist = true;
-            } else if (tip.equals("Lista")) {
-                getValuesFromBNRForLista(moneda, dataInceput, dataSfarsit);
-                //typeExist = true;
+            String tip = "";
+            if (intent.hasExtra("tip")) {
+                tip = intent.getStringExtra("tip");
             }
+
+            String moneda = "";
+            if (intent.hasExtra("moneda")) {
+                moneda = intent.getStringExtra("moneda");
+                sp_selectaremoneda.setSelection(values.indexOf(moneda));
+            }
+
+            String dataInceput = "";
+            if (intent.hasExtra("dataInceput")) {
+                dataInceput = intent.getStringExtra("dataInceput");
+                et_datastart.setText(dataInceput);
+            }
+
+            String dataSfarsit = "";
+            if (intent.hasExtra("dataSfarsit")) {
+                dataSfarsit = intent.getStringExtra("dataSfarsit");
+                et_datafinal.setText(dataSfarsit);
+            }
+
+            if (!tip.isEmpty()) {
+                if (tip.equals("Grafic")) {
+                    getValuesFromBNRForGrafic(intent.getStringExtra("moneda"), dataInceput, dataSfarsit);
+                } else if (tip.equals("Lista")) {
+                    getValuesFromBNRForLista(intent.getStringExtra("moneda"), dataInceput, dataSfarsit);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -310,7 +313,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                     XmlPullParser parser = xmlPullParserFactory.newPullParser();
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                     parser.setInput(is, null);
-                    parsareXML(parser);
+                    parsareXMLForSpinner(parser);
                     if (is != null) {
                         is.close();
                     }
@@ -323,7 +326,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     }
 
     //parsareXML -> functia in care se defineste procesul de parsare, pentru a obtine datele necesare
-    public void parsareXML(XmlPullParser parser) throws XmlPullParserException, IOException {
+    public void parsareXMLForSpinner(XmlPullParser parser) throws XmlPullParserException, IOException {
 
         int event = parser.getEventType();
         final UrlParser[] linie_curenta = {null};
@@ -478,8 +481,6 @@ public class GenerareRapoarte extends AppCompatActivity {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip grafic poate fi afisat doar pentru o moneda!", Toast.LENGTH_SHORT).show();
                     } else {
                         clearGrafic();
-//                        typeGrafic = true;
-//                        typeLista = false;
                         getValuesFromBNRForGrafic(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
@@ -506,8 +507,6 @@ public class GenerareRapoarte extends AppCompatActivity {
                         Toast.makeText(GenerareRapoarte.this, "Raportul de tip lista poate fi afisat doar pentru toate monedele!", Toast.LENGTH_SHORT).show();
                     } else {
                         clearLista();
-//                        typeLista = true;
-//                        typeGrafic = false;
                         getValuesFromBNRForLista(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString());
                     }
                 } else {
@@ -521,26 +520,7 @@ public class GenerareRapoarte extends AppCompatActivity {
         btn_salvare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (typeGrafic == true) {
-//                    Boolean result;
-//                    result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Grafic");
-//                    if (result) {
-//                        Toast.makeText(GenerareRapoarte.this, "Tipul de raport a fost salvat cu succes !", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
-//                    }
-//                } else if (typeLista == true) {
-//                    Boolean result;
-//                    result = dateBaseHelper.insertValues("Toate monedele", et_datastart.getText().toString(), et_datafinal.getText().toString(), "Lista");
-//                    if (result) {
-//                        Toast.makeText(GenerareRapoarte.this, "Tipul de raport a fost salvat cu succes !", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
-//                    }
-//                } else if (typeLista == false && typeGrafic == false) {
-//                    Toast.makeText(GenerareRapoarte.this, "Selectati o varianta de salvare a raportului !", Toast.LENGTH_SHORT).show();
-//                }
-                if (sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele") && !et_datastart.getText().toString().equals("") && !et_datafinal.getText().toString().equals("") && min.size()>0) {
+                if (sp_selectaremoneda.getSelectedItem().toString().equals("Toate monedele") && !et_datastart.getText().toString().equals("") && !et_datafinal.getText().toString().equals("") && min.size() > 0) {
                     Boolean result;
                     result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Lista");
                     if (result) {
@@ -548,7 +528,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-                }else if(!sp_selectaremoneda.getSelectedItem().toString().equals("Toate monelede") && !sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda") && !et_datastart.getText().toString().equals("") && !et_datafinal.getText().toString().equals("") && valori.size()>0){
+                } else if (!sp_selectaremoneda.getSelectedItem().toString().equals("Toate monelede") && !sp_selectaremoneda.getSelectedItem().toString().equals("Selectare moneda") && !et_datastart.getText().toString().equals("") && !et_datafinal.getText().toString().equals("") && valori.size() > 0) {
                     Boolean result;
                     result = dateBaseHelper.insertValues(sp_selectaremoneda.getSelectedItem().toString(), et_datastart.getText().toString(), et_datafinal.getText().toString(), "Grafic");
                     if (result) {
@@ -556,7 +536,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                     } else {
                         Toast.makeText(GenerareRapoarte.this, "Esec la salvare !", Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(GenerareRapoarte.this, "Toate datele trebuie completate si raportul generat inainte de salvare!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -778,7 +758,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     private Thread worker1;
 
     //parsareRaportXMLForLista -> functia in care se defineste procesul de parsare, pentru a obtine datele necesare pentru formarea listei
-    public void ParsareRaportXMLForLista(XmlPullParser parser, String m, String di, String ds) throws XmlPullParserException, IOException {
+    public void parsareRaportXMLForLista(XmlPullParser parser, String m, String di, String ds) throws XmlPullParserException, IOException {
         mapmin = new LinkedHashMap<>();
         mapmax = new LinkedHashMap<>();
         final int[] event = {parser.getEventType()};
@@ -903,22 +883,17 @@ public class GenerareRapoarte extends AppCompatActivity {
                                                 parser.nextTag();
                                                 isDownload = true;
                                             }
-
                                             //daca data din xml > data sfarsit, oprim parsarea
                                             if (calendarData.after(calendarFinal)) {
                                                 return isDownload;
-
                                             }
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         } catch (XmlPullParserException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                            }
+                                            e.printStackTrace(); }
+                                    } } }
                             break;
                         case XmlPullParser.END_TAG:
                             break;
@@ -929,11 +904,9 @@ public class GenerareRapoarte extends AppCompatActivity {
                         e.printStackTrace();
                     } catch (XmlPullParserException e) {
                         e.printStackTrace();
-                    }
-                }
+                    } }
                 return isDownload;
             }
-
             @Override
             public void run() {
                 updateUI(download());
@@ -968,7 +941,7 @@ public class GenerareRapoarte extends AppCompatActivity {
                     XmlPullParser parser = xmlPullParserFactory.newPullParser();
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                     parser.setInput(is, null);
-                    ParsareRaportXMLForLista(parser, m, di, ds);
+                    parsareRaportXMLForLista(parser, m, di, ds);
                     if (is != null) {
                         is.close();
                     }
