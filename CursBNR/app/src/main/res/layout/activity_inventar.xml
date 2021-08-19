@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Inventar.Inventar"
-    android:background="@drawable/backgroundstyle"
+    android:background="@color/sid_background_grey"
     android:weightSum="1"
     android:orientation="vertical">
 
@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.3"
         android:weightSum="1"
+        android:layout_margin="10dp"
         android:orientation="horizontal">
 
         <EditText
@@ -22,16 +23,17 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:hint="Scanare/Introducere cod de bare"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="#FFFFFF"
+            android:textColorHint="@color/black"
+            android:backgroundTint="@color/lm_green"
+            android:textColor="@color/black"
             android:gravity="center"
             android:textSize="15sp"
             android:layout_gravity="top|center"
             android:imeOptions="actionDone"
+            android:textCursorDrawable="@color/lm_green"
             android:singleLine="true"
             android:inputType="number"/>
+
         <Button
             android:id="@+id/btn_scanare"
             android:layout_width="wrap_content"
@@ -40,6 +42,7 @@
             android:gravity="bottom|center"
             android:layout_gravity="center|left"
             android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/scan_button"/>
@@ -52,7 +55,10 @@
         android:layout_weight="0.3"
         android:weightSum="1.2"
         android:background="@drawable/textviewmargins"
-        android:layout_margin="5dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -60,13 +66,13 @@
             android:layout_weight="0.3"
             android:text="Produs"
             android:gravity="center"
-            android:textColor="#FFFFFF"/>
+            android:textColor="@color/black"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
             android:text="Pret"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:gravity="center"
             android:layout_marginRight="25dp"/>
         <TextView
@@ -75,19 +81,25 @@
             android:layout_weight="0.3"
             android:text="Cod de bare"
             android:gravity="center|left"
-            android:textColor="#FFFFFF"/>
+            android:textColor="@color/black"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
             android:text="Cantitate"
             android:gravity="center"
-            android:textColor="#FFFFFF"/>
+            android:textColor="@color/black"/>
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_inventar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/bg_border_white"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"
         android:layout_weight="0.1"/>
 
     <LinearLayout
@@ -105,20 +117,20 @@
             android:text="Salvare CSV"
             android:gravity="center"
             android:textSize="15sp"
-            android:layout_margin="15dp"
-            android:background="@drawable/buton_csv"
-            android:textColor="#FFFFFF"/>
+            android:layout_margin="10dp"
+            android:background="@drawable/gradient_ripple"
+            android:textColor="@color/white"/>
         <Button
             android:id="@+id/btn_trimitere"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:layout_margin="15dp"
+            android:layout_margin="10dp"
             android:text="Trimitere CSV"
             android:textSize="15sp"
-            android:background="@drawable/buton_csv"
-            android:textColor="#FFFFFF"/>
+            android:background="@drawable/gradient_ripple"
+            android:textColor="@color/white"/>
 
 
     </LinearLayout>

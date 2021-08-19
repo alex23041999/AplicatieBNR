@@ -8,9 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.cursbnr.R;
-
 import java.util.List;
 
 public class RecyclerCurs_Adapter extends RecyclerView.Adapter<RecyclerCurs_Adapter.ViewHolder> {

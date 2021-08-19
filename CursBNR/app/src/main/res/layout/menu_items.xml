@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.cursbnr.CursBNR.AnimationUtils.CircleImageView
+        android:id="@+id/cursvalutar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle"
+        android:elevation="2dp"
+        android:src="@drawable/ic_baseline_monetization_on_24"
+        circle:name="Curs valutar" />
+
+    <com.example.cursbnr.CursBNR.AnimationUtils.CircleImageView
+        android:id="@+id/generareRapoarte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle"
+        android:elevation="2dp"
+        android:src="@drawable/ic_baseline_insert_drive_file_24"
+        circle:name="Generare rapoarte" />
+
+
+    <com.example.cursbnr.CursBNR.AnimationUtils.CircleImageView
+        android:id="@+id/istoric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle"
+        android:elevation="2dp"
+        android:src="@drawable/ic_baseline_history_24"
+        circle:name="Istoric rapoarte" />
+</merge>

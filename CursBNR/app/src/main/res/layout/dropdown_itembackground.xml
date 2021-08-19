@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:textSize="20sp"
     android:textStyle="italic"
-    android:textColor="#FFFFFF"
+    android:textColor="@color/white"
     android:gravity="center"
-    android:background="@drawable/dropdown_itemstyle">
+    android:background="@color/lm_green">
 </TextView>

@@ -3,4 +3,50 @@
     <color name="blue">#3734FE</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <color name="lm_darkGreen">#005F61</color>
+    <color name="lm_green">#78BE20</color>
+    <color name="lm_lightGreen">#CEDC00</color>
+    <color name="lm_ultraLightGreen">#D4EB8E</color>
+
+    <color name="lm_white">#FFFFFF</color>
+
+    <color name="lm_black">#000000</color>
+
+    <color name="lm_grey">#515151</color>
+
+    <color name="lm_darkBlue">#00263A</color>
+    <color name="lm_blue">#0092BA</color>
+    <color name="lm_lightBlue">#99D6EA</color>
+    <color name="lm_ultraLighBlue">#B9DCD2</color>
+
+    <color name="lm_red">#DA291A</color>
+    <color name="lm_lightRed">#CE0F69</color>
+
+    <color name="lm_orange">#FFA300</color>
+    <color name="lm_lightOrange">#FDD757</color>
+
+    <color name="lm_lightBrown">#7B6469</color>
+    <color name="lm_ultraLightBrown">#C5B9AC</color>
+
+    <color name="translucent">#43090808</color>
+    <color name="translucent_white">#77FFFFFF</color>
+    <color name="translucent_grey">#4DCCC9C9</color>
+    <color name="sid_background_grey">#f1f1f1</color>
+    <color name="sid_ultraLightGrey">#f2f2f2</color>
+    <color name="sid_lightGrey">#CCCCCC</color>
+    <color name="sid_grey">#929192</color>
+    <color name="sid_grey1">#8E8E93</color>
+
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#78BE20</color>
+
+    <color name="slycalendar_defBackgroundColor">#ffffff</color>
+    <color name="slycalendar_defHeaderColor">#2962ff</color>
+    <color name="slycalendar_defHeaderTextColor">#ffffff</color>
+    <color name="slycalendar_defTextColor">#333333</color>
+    <color name="slycalendar_defSelectedColor">#2962ff</color>
+    <color name="slycalendar_defSelectedTextColor">#ffffff</color>
+
 </resources>

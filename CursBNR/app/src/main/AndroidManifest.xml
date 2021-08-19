@@ -14,14 +14,14 @@
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
     <application
-        android:theme="@style/Theme.AppCompat.NoActionBar"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
-        android:icon="@drawable/appicon"
+        android:icon="@drawable/cursbnsicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/cursbnsicon"
         android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.NoActionBar"
         android:requestLegacyExternalStorage="true">
         <activity android:name=".Inventar.Inventar"
             android:windowSoftInputMode="stateHidden|adjustPan"
@@ -45,8 +45,8 @@
         <activity
             android:name=".CursBNR.IstoricRapoarte.Activitati.IstoricRapoarte"
             android:screenOrientation="portrait"
-            android:noHistory="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:noHistory="true"/>
         <activity
             android:name=".Inventar.Utile.BarcodeScan"
             android:screenOrientation="portrait"

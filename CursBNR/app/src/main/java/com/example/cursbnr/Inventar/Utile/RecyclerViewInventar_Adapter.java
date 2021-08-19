@@ -51,39 +51,11 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
         Float list_cant = objectsInventar.get(position).getCantitate();
         holder.etcantitate.setText(list_cant.toString());
 
-//        holder.etcantitate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
-//                        || actionId == EditorInfo.IME_ACTION_DONE) {
-//
-//                    try {
-//                        Inventar.codbareTAG = objectsInventar.get(position).getCodbare();
-//                        new DateBaseHelper(context).updateDataBaseInventar(objectsInventar.get(position).getDenumire(), Float.valueOf(holder.etcantitate.getText().toString()));
-
-//                        notifyDataSetChanged();
-//                        holder.etcantitate.clearFocus();
-//
-//                        for (int i = 0; i < objectsInventar.size(); i++) {
-//                            if (Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(position).getCodbare())) {
-//                                holder.itemView.setBackgroundResource(R.drawable.background_selecteditem);
-//                            } else {
-//                                holder.itemView.setBackgroundResource(R.drawable.background_recycleristoric);
-//                            }
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                return false;
-//            }
-//        });
-
         for (int i = 0; i < objectsInventar.size(); i++) {
             if (Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(position).getCodbare())) {
                 holder.itemView.setBackgroundResource(R.drawable.background_selecteditem);
             } else {
-                holder.itemView.setBackgroundResource(R.drawable.background_recyclerinventar);
+                holder.itemView.setBackgroundResource(R.drawable.bg_border_white);
             }
         }
     }
@@ -124,7 +96,7 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
                                 if (Inventar.codbareTAG != null && Inventar.codbareTAG.equals(objectsInventar.get(getAbsoluteAdapterPosition()).getCodbare())) {
                                     itemView.setBackgroundResource(R.drawable.background_selecteditem);
                                 } else {
-                                    itemView.setBackgroundResource(R.drawable.background_recycleristoric);
+                                    itemView.setBackgroundResource(R.drawable.bg_border_white);
                                 }
                             }
                         } catch (Exception e) {

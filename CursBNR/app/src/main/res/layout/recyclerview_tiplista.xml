@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="4"
-    android:background="@drawable/background_reclyclergenerarerapoarte">
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/linearlayout_tiplista"
@@ -30,9 +30,8 @@
                 android:layout_weight="0.9"
                 android:gravity="center"
                 android:text="Moneda"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_tiplista_interval"
@@ -41,9 +40,9 @@
                 android:layout_weight="0.9"
                 android:gravity="center"
                 android:text="Interval"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/black"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                />
 
             <TextView
                 android:id="@+id/tv_tiplista_minim"
@@ -52,9 +51,8 @@
                 android:layout_weight="1.1"
                 android:gravity="center"
                 android:text="Min"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_tiplista_maxim"
@@ -63,9 +61,8 @@
                 android:layout_weight="1.1"
                 android:gravity="center"
                 android:text="Max"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textSize="15sp" />
         </LinearLayout>
 
     </LinearLayout>

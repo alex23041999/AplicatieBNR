@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundstyle"
+    android:background="@color/sid_background_grey"
     android:orientation="vertical"
-    android:weightSum="2"
+    android:weightSum="1"
     tools:context=".CursBNR.CursValutar.Activitati.CursValutar">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.8"
+        android:layout_weight="0.9"
         android:orientation="horizontal"
         android:layout_gravity="center|left"
         android:gravity="center|left"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:background="@drawable/textviewmargins">
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_baseline_compare_arrows_24"
             android:text="Curs valutar:"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginLeft="10dp"
@@ -35,9 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left|center"
-            android:hint="Data curenta"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
+            android:hint=" Data curenta"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginLeft="3dp"/>
@@ -47,13 +47,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_cursvalutar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_border_white"
+            android:layout_margin="10dp"
+            android:padding="5dp"/>
 
     </LinearLayout>
 

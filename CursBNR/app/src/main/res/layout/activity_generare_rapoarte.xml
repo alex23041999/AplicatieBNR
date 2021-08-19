@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_generarerapoarte"
+    android:background="@color/sid_background_grey"
     android:orientation="vertical"
     android:weightSum="1"
     tools:context=".CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte">
@@ -11,35 +11,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_weight="0.6"
         android:orientation="vertical"
         android:weightSum="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="7dp"
+            android:layout_margin="10dp"
             android:layout_weight="0.4"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/tv_selectmoneda"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:drawableLeft="@drawable/ic_baseline_attach_money_24"
                 android:gravity="left|center"
                 android:text="Monedă"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
 
             <Spinner
                 android:id="@+id/spinner_selectaremoneda"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.3"
                 android:background="@drawable/spinner_background"
                 android:gravity="center" />
         </LinearLayout>
@@ -47,13 +46,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
+            android:background="@drawable/bg_border_white"
+            android:layout_margin="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="7dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:weightSum="1">
@@ -64,9 +64,9 @@
                     android:layout_weight="0.5"
                     android:gravity="center|bottom"
                     android:text="Dată început"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/black"
                     android:textSize="17sp"
-                    android:textStyle="bold" />
+                    />
 
                 <EditText
                     android:id="@+id/et_datainceput"
@@ -77,15 +77,14 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:hint="Data început..."
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="7dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:weightSum="1">
@@ -96,9 +95,8 @@
                     android:layout_weight="0.5"
                     android:gravity="center|bottom"
                     android:text="Dată sfârșit"
-                    android:textColor="#FFFFFF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
 
                 <EditText
                     android:id="@+id/et_datasfarsit"
@@ -109,15 +107,15 @@
                     android:focusable="false"
                     android:gravity="center"
                     android:hint="Data sfârșit..."
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"
+            android:layout_weight="0.4"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -130,9 +128,8 @@
                 android:drawableLeft="@drawable/tip_raport"
                 android:gravity="left|center"
                 android:text="Tip raport:"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -153,8 +150,7 @@
                     android:clickable="true"
                     android:textColor="#FFFFFF"
                     android:textOff="Grafic"
-                    android:textOn="Grafic"
-                    android:textStyle="italic|bold"/>
+                    android:textOn="Grafic" />
 
                 <ToggleButton
                     android:id="@+id/btn_lista"
@@ -169,7 +165,7 @@
                     android:textColor="#FFFFFF"
                     android:textOff="Lista"
                     android:textOn="Lista"
-                    android:textStyle="italic|bold"/>
+                    android:textStyle="italic"/>
 
                 <Button
                     android:id="@+id/btn_salvare"
@@ -183,7 +179,7 @@
                     android:clickable="true"
                     android:text="Salvare raport"
                     android:textColor="#FFFFFF"
-                    android:textStyle="italic|bold"/>
+                    android:textStyle="italic"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -192,7 +188,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_weight="0.4"
         android:orientation="vertical"
         android:weightSum="1">
 
@@ -206,6 +202,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/bg_border_white"
+                android:layout_margin="10dp"
+                android:padding="5dp"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -233,9 +232,9 @@
                         android:layout_weight="0.9"
                         android:gravity="center"
                         android:text="Moneda"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/black"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        />
 
                     <TextView
                         android:id="@+id/tv_tiplista_interval"
@@ -244,9 +243,9 @@
                         android:layout_weight="0.9"
                         android:gravity="center"
                         android:text="Interval"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/black"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        />
 
                     <TextView
                         android:id="@+id/tv_tiplista_minim"
@@ -255,9 +254,9 @@
                         android:layout_weight="1.1"
                         android:gravity="center"
                         android:text="Min"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/black"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                       />
 
                     <TextView
                         android:id="@+id/tv_tiplista_maxim"
@@ -266,15 +265,18 @@
                         android:layout_weight="1.1"
                         android:gravity="center"
                         android:text="Max"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/black"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_generarerapoarte"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/bg_border_white"
+                    android:layout_margin="10dp"
+                    android:padding="5dp"
                     android:layout_weight="0.3" />
             </LinearLayout>
         </RelativeLayout>

@@ -5,59 +5,33 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".CursBNR.HomeScreen"
-    android:background="@drawable/backgroundstyle"
+    android:background="@color/sid_background_grey"
     android:orientation="vertical"
-    android:weightSum="3">
+    android:weightSum="1">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cursvalutar"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gradient_ripple2"
-            android:layout_gravity="left"
-            android:text="Curs valutar"
-            android:textAlignment="gravity"
-            android:textColor="#000000"
-            android:textSize="20dp"
-            android:textStyle="bold|italic"
-            android:layout_marginTop="100dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginBottom="50dp"
-            android:drawableBottom="@drawable/ic_baseline_monetization_on_24"/>
+    <com.example.cursbnr.CursBNR.AnimationUtils.CircleLayout
+        android:id="@+id/circle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_border_white"
+        android:layout_above="@+id/selected_textView"
+        android:layout_gravity="center_horizontal" >
+        <include layout="@layout/menu_items" />
+    </com.example.cursbnr.CursBNR.AnimationUtils.CircleLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_generarerapoarte"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/gradient_ripple3"
-            android:gravity="center"
-            android:text="Generare rapoarte"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="20dp"
-            android:textStyle="bold|italic"
-            android:layout_margin="50dp"
-            android:drawableBottom="@drawable/ic_baseline_insert_drive_file_24"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_istoricrapoarte"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/gradient_ripple"
-            android:gravity="center"
-            android:text="ISTORIC RAPOARTE"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="20dp"
-            android:textStyle="bold|italic"
-            android:layout_marginBottom="100dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="50dp"
-            android:drawableBottom="@drawable/ic_baseline_history_24"/>
+    <TextView
+        android:id="@+id/selected_textView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:background="@drawable/bg_border_white"
+        android:gravity="center|center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

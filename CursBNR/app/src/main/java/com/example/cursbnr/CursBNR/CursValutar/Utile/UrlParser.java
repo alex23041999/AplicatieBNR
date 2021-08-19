@@ -1,6 +1,5 @@
 package com.example.cursbnr.CursBNR.CursValutar.Utile;
 
-import org.xmlpull.v1.XmlPullParserFactory;
 
 public class UrlParser {
     public String moneda, valoare;

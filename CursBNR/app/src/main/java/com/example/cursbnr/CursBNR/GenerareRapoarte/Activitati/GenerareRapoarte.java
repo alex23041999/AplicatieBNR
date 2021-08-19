@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -422,19 +421,19 @@ public class GenerareRapoarte extends AppCompatActivity {
         }
 
         LineDataSet linedataset = new LineDataSet(entries, "Valori moneda");
-        linedataset.setColor(Color.parseColor("#3734FE"));
+        linedataset.setColor(Color.parseColor("#78BE20"));
         linedataset.setLineWidth(2);
         linedataset.setValueTextSize(10);
         linedataset.setValueTextColor(Color.parseColor("#000000"));
         linechart.getDescription().setEnabled(false);
-        linechart.getAxisLeft().setTextColor(getResources().getColor(R.color.blue));
+        linechart.getAxisLeft().setTextColor(getResources().getColor(R.color.colorAccent));
         linechart.getAxisRight().setDrawLabels(false);
 
         LineData lineData = new LineData(linedataset);
         linechart.setData(lineData);
         linechart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(zile));
         linechart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        linechart.getXAxis().setTextColor(Color.parseColor("#3734FE"));
+        linechart.getXAxis().setTextColor(getResources().getColor(R.color.lm_darkBlue));
         linechart.getXAxis().setTextSize(8);
 
         linechart.invalidate();

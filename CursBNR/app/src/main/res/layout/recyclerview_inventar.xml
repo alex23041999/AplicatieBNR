@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearlayout_inventar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="horizontal"
-    android:weightSum="4"
-    android:background="@drawable/background_recyclerinventar"
-    android:id="@+id/linearlayout_inventar">
+    android:weightSum="4">
 
     <TextView
         android:id="@+id/denumire_produs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Denumire"
-        android:textColor="#000000"
+        android:layout_weight="1"
         android:gravity="center"
-        android:layout_weight="1"/>
+        android:text="Denumire"
+        android:textColor="#000000" />
+
     <TextView
         android:id="@+id/pret_produs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pret"
-        android:textColor="#000000"
+        android:layout_weight="1.1"
         android:gravity="center"
-        android:layout_weight="1.1"/>
+        android:text="Pret"
+        android:textColor="#000000" />
+
     <TextView
         android:id="@+id/codbare_produs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cod bare"
-        android:textColor="#000000"
+        android:layout_weight="0.9"
         android:gravity="center"
-        android:layout_weight="0.9"/>
+        android:text="Cod bare"
+        android:textColor="#000000" />
+
     <EditText
         android:id="@+id/cantitate_produs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cantitate"
-        android:textColor="#000000"
-        android:gravity="center"
         android:layout_weight="1"
+        android:gravity="center"
+        android:hint="Cantitate"
         android:imeOptions="actionDone"
-        android:singleLine="true"
+        android:inputType="numberDecimal"
         android:maxLength="9"
-        android:inputType="numberDecimal"/>
+        android:singleLine="true"
+        android:textCursorDrawable="@color/lm_green"
+        android:textColor="@color/black" />
 
 </LinearLayout>

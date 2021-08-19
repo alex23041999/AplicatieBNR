@@ -3,7 +3,6 @@ package com.example.cursbnr.CursBNR.GenerareRapoarte.Utile;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte;
