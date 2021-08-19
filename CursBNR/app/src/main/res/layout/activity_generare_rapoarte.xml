@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:gravity="center|bottom"
+                    android:gravity="center"
                     android:text="Dată început"
                     android:textColor="@color/black"
                     android:textSize="17sp"
@@ -76,7 +76,7 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:gravity="center"
-                    android:hint="Data început..."
+                    android:hint="Alege data..."
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
 
@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:gravity="center|bottom"
+                    android:gravity="center"
                     android:text="Dată sfârșit"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
@@ -106,7 +106,7 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:gravity="center"
-                    android:hint="Data sfârșit..."
+                    android:hint="Alege data..."
                     android:textColor="@color/black"
                     android:textColorHint="@color/black" />
             </LinearLayout>

@@ -27,8 +27,10 @@ public class InterfataPrincipala extends Activity {
 
     Button btnInventar, btnCursBNR, btn_ok;
     BroadcastReceiver broadcastReceiver;
-    private static final int STORAGE_PERMISSION_CODE = 101;
-    private static final int MY_CAMERA_REQUEST_CODE = 100;
+//    private static final int STORAGE_PERMISSION_CODE = 101;
+//    private static final int MY_CAMERA_REQUEST_CODE = 100;
+    int code = 1;
+    String [] permissions;
     AlertDialog alertDialog;
 
     @Override
@@ -36,7 +38,7 @@ public class InterfataPrincipala extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interfata_principala);
 
-
+        permissions =new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
         btnCursBNR = findViewById(R.id.btn_cursBNR);
         btnInventar = findViewById(R.id.btn_inventar);
         broadcastReceiver = new CheckingConnection();
@@ -59,10 +61,10 @@ public class InterfataPrincipala extends Activity {
 //        }
 //    }
 
-    public boolean checkPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(InterfataPrincipala.this, permission) == PackageManager.PERMISSION_DENIED) {
+    public boolean checkPermission(String permission) {
+        if (ContextCompat.checkSelfPermission(InterfataPrincipala.this, permission) != PackageManager.PERMISSION_GRANTED) {
             // Requesting the permission
-            ActivityCompat.requestPermissions(InterfataPrincipala.this, new String[]{permission}, requestCode);
+            ActivityCompat.requestPermissions(InterfataPrincipala.this, new String[]{permission},code);
             return false;
         } else {
             return true;
@@ -87,17 +89,18 @@ public class InterfataPrincipala extends Activity {
         btnInventar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE) && checkPermission(Manifest.permission.CAMERA, MY_CAMERA_REQUEST_CODE)) {
+                for(String permission : permissions){
+                    checkPermission(permission);
+                }
+                if (checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) && checkPermission(Manifest.permission.CAMERA)) {
                     try {
                         Intent intent = new Intent(InterfataPrincipala.this, Inventar.class);
                         startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    alertDialog.hide();
-                    alertDialog.dismiss();
                 } else {
-                   alertDialog= new AlertDialog.Builder(InterfataPrincipala.this).setMessage("Trebuie sa confirmati permisiunile pentru a folosi modulul INVENTAR!").setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
+                   alertDialog= new AlertDialog.Builder(InterfataPrincipala.this).setMessage("Trebuie sa confirmati permisiunile pentru a folosi modulul INVENTAR!").setPositiveButton("Meniu Setari", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // navigate to settings
@@ -106,11 +109,10 @@ public class InterfataPrincipala extends Activity {
                             settingIntent.setData(uri);
                             startActivity(settingIntent);
                         }
-                    }).setNegativeButton("Inchidere", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton("Inchidere aplicatie", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // leave
-                            System.exit(0);
+                                System.exit(0);
                         }
                     }).show();
                 }

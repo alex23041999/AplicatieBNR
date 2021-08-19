@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.cursbnr.R;
 
@@ -51,6 +52,8 @@ public class CheckingConnection extends BroadcastReceiver {
             public void onClick(View v) {
                 if (isConnectedOrNot(mContext)) {
                     dialog.dismiss();
+                }else{
+                    Toast.makeText(mContext, "Verificati conexiunea la internet, apoi apasati OK !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
