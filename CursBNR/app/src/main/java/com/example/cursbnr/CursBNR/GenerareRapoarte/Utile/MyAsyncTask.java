@@ -3,12 +3,14 @@ package com.example.cursbnr.CursBNR.GenerareRapoarte.Utile;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte;
 
 public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
     ProgressDialog progressDialog;
+    GenerareRapoarte generareRapoarte;
     Activity activity;
     static final String url_10rapoarte = "https://www.bnr.ro/nbrfxrates10days.xml";
 
@@ -27,7 +29,6 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        //GenerareRapoarte.getValuesFromBNR();
         return null;
     }
 

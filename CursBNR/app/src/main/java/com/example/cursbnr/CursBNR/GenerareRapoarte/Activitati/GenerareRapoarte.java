@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.example.cursbnr.CursBNR.CursValutar.Utile.CheckingConnection;
 import com.example.cursbnr.CursBNR.CursValutar.Utile.UrlParser;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.DateBaseHelper;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.MonedaValoare;
+import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.MyAsyncTask;
 import com.example.cursbnr.CursBNR.GenerareRapoarte.Utile.RecyclerView_TipLista_Adapter;
 import com.example.cursbnr.R;
 import com.github.mikephil.charting.charts.LineChart;
@@ -98,6 +100,8 @@ public class GenerareRapoarte extends AppCompatActivity {
     Intent intent;
     int i = 0;
     ArrayAdapter<String> adapter_spinner;
+    MyAsyncTask myAsyncTask;
+    GenerareRapoarte generareRapoarte;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
