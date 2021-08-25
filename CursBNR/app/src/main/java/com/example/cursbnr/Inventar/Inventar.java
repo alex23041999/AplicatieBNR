@@ -60,7 +60,7 @@ import retrofit2.Response;
 public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
     private CompositeDisposable compositeDisposable;
     BroadcastReceiver broadcastReceiver;
-    Button btn_scanare, btn_salvareCSV, btn_trimitereCSV;
+    Button btn_scanare, btn_trimitereCSV;
     EditText et_codBare, et_cantitate;
     RecyclerView recyclerView_inventar;
     RecyclerViewInventar_Adapter adapter;
@@ -99,14 +99,12 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
         editTextCodbare();
         setMaxLenghtEditText(et_codBare);
         btnScanareOnClick();
-        btnSalvareCSVonClick();
         btnTrimitereOnClick();
     }
 
     private void initComponents() {
         broadcastReceiver = new CheckingConnection();
         btn_scanare = findViewById(R.id.btn_scanare);
-        btn_salvareCSV = findViewById(R.id.btn_salvare);
         btn_trimitereCSV = findViewById(R.id.btn_trimitere);
         recyclerView_inventar = findViewById(R.id.recycler_inventar);
         et_codBare = findViewById(R.id.et_codbare);
@@ -137,9 +135,9 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                 ));
     }
 
-    //btnSalvareCSVonClick ->functie prin care elementele din lista se salveaza in memoria telefonului sub forma unui fisier CSV
-    private void btnSalvareCSVonClick() {
-        btn_salvareCSV.setOnClickListener(new View.OnClickListener() {
+    //btnTrimitereOnClick -> functie in care se verifica exista si marimea fisierul CSV , iar in caz ca acesta exista si contine elementele , va fi trimis pe calea selectata
+    private void btnTrimitereOnClick() {
+        btn_trimitereCSV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -162,23 +160,9 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                         writer.writeNext(item);
                     }
                     writer.close();
-                    if (f.length() > 0) {
-                        Toast.makeText(Inventar.this, "Salvarea datelor in CSV a avut succes", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(Inventar.this, "Datele nu au putut fi salvate in CSV", Toast.LENGTH_SHORT).show();
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-        });
-    }
-
-    //btnTrimitereOnClick -> functie in care se verifica exista si marimea fisierul CSV , iar in caz ca acesta exista si contine elementele , va fi trimis pe calea selectata
-    private void btnTrimitereOnClick() {
-        btn_trimitereCSV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 try {
                     if (f.exists() && f.length() > 0) {
                         Context context = getApplicationContext();
@@ -189,9 +173,10 @@ public class Inventar extends AppCompatActivity implements OnRecyclerViewRow {
                         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         sendIntent.putExtra(Intent.EXTRA_STREAM, path);
                         startActivity(Intent.createChooser(sendIntent, "Send E-mail"));
+                    }else{
+                        Toast.makeText(Inventar.this, "Fisierul nu poate fi trimis, reincercati!", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
-                    Toast.makeText(Inventar.this, "Nu exista niciun fisier CSV salvat.", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }

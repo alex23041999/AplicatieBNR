@@ -24,8 +24,7 @@ import com.example.cursbnr.CursBNR.GenerareRapoarte.Activitati.GenerareRapoarte;
 import com.example.cursbnr.CursBNR.IstoricRapoarte.Activitati.IstoricRapoarte;
 import com.example.cursbnr.R;
 
-public class HomeScreen extends Activity implements CircleLayout.OnItemSelectedListener,
-        CircleLayout.OnItemClickListener, CircleLayout.OnRotationFinishedListener, CircleLayout.OnCenterClickListener {
+public class HomeScreen extends Activity implements CircleLayout.OnItemSelectedListener, CircleLayout.OnItemClickListener, CircleLayout.OnRotationFinishedListener, CircleLayout.OnCenterClickListener {
     BroadcastReceiver broadcastReceiver;
     protected CircleLayout circleLayout;
     protected TextView selectedTextView;
@@ -65,13 +64,10 @@ public class HomeScreen extends Activity implements CircleLayout.OnItemSelectedL
 
         switch (view.getId()) {
             case R.id.cursvalutar:
-                // Handle calendar selection
                 break;
             case R.id.generareRapoarte:
-                // Handle cloud selection
                 break;
             case R.id.istoric:
-                // Handle mail selection
                 break;
         }
     }
@@ -109,7 +105,6 @@ public class HomeScreen extends Activity implements CircleLayout.OnItemSelectedL
 
     @Override
     public void onCenterClick() {
-        //Toast.makeText(getApplicationContext(), R.string.center_click, Toast.LENGTH_SHORT).show();
     }
 
     private void InitComponents() {

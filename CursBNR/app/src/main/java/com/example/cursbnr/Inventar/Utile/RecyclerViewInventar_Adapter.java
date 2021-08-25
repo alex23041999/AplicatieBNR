@@ -25,7 +25,6 @@ public class RecyclerViewInventar_Adapter extends RecyclerView.Adapter<RecyclerV
     Context context;
     private ArrayList<ObjectInventar> objectsInventar;
     private final OnRecyclerViewRow onRecyclerViewRow;
-    private DateBaseHelper dateBaseHelper;
 
     public RecyclerViewInventar_Adapter(ArrayList<ObjectInventar> objectsInventar, Context context, OnRecyclerViewRow onRecyclerViewRow) {
         this.context = context;

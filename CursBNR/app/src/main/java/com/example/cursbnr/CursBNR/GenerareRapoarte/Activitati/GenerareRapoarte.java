@@ -99,8 +99,6 @@ public class GenerareRapoarte extends AppCompatActivity {
     Intent intent;
     int i = 0;
     ArrayAdapter<String> adapter_spinner;
-    MyAsyncTask myAsyncTask;
-    GenerareRapoarte generareRapoarte;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override

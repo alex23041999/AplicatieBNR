@@ -80,6 +80,18 @@ public class DateBaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    public boolean isEmptyIstoric() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean empty = false;
+        Cursor cursor = db.rawQuery("SELECT * FROM History_Raports", null);
+        if (cursor.moveToFirst()) {
+            empty = false;
+        }else{
+            empty = true;
+        }
+        return empty;
+    }
+
     public boolean isEmpty() {
         SQLiteDatabase db = this.getWritableDatabase();
         boolean empty = false;
