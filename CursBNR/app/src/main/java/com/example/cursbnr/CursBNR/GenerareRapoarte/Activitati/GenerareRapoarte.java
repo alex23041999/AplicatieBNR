@@ -91,7 +91,7 @@ public class GenerareRapoarte extends AppCompatActivity {
     LinearLayout linearLayout;
     BroadcastReceiver broadcastReceiver1;
     static final String url_bnr = "https://www.bnr.ro/nbrfxrates.xml";
-    static final String url_2021 = "https://www.bnr.ro/files/xml/years/nbrfxrates2021.xml";
+    static final String url_2021 = "https://www.bnr.ro/files/xml/years/nbrfxrates2022.xml";
     ProgressDialog progressDialog;
     DateBaseHelper dateBaseHelper;
     Map<String, Float> mapmin;
